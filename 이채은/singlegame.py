@@ -38,7 +38,6 @@ button_y = 10
 WHITE = (255, 255, 255)
 button_rect = pygame.draw.rect(section1, WHITE, (button_x, button_y, button_width, button_height))
 
-# Blit, 화면 위에 버튼 표시
 screen.blit(section1, (0, 0))
 screen.blit(section2, (section1_width, 0))
 screen.blit(section3, (0, section1_height))
