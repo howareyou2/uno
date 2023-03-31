@@ -1,5 +1,3 @@
-수정한 새코드
-
 import pygame
 import sys
 import os
