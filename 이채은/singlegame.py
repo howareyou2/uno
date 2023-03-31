@@ -1,3 +1,5 @@
+수정한 새코드
+
 import pygame
 import sys
 import os
@@ -63,7 +65,7 @@ while True:
  
             # 팝업창 크기 지정
             popup_width = 200
-            popup_height = 200
+            popup_height = 150
             popup_x = int((screen_width - popup_width) / 2)
             popup_y = int((screen_height - popup_height) / 2)
             
@@ -73,6 +75,18 @@ while True:
             # 팝업창 배경색 지정
             popup = pygame.Surface((popup_width, popup_height))
             popup.fill((0, 0, 0))
+
+            #팝업창 흰색 테두리 지정
+            pygame.draw.rect(popup, WHITE, (0, 0, popup_width, popup_height), 5)
+
+            #팝업창 "X"버튼을 지정하고 배경색은 흰색으로 지정,글씨는 흰색으로 지정,  누르면 팝업창이 닫히게 함
+            x_button = pygame.draw.rect(popup, WHITE, (popup_width - 30, 10, 20, 20))
+            x_text = font.render("X", True, BLACK)
+            popup.blit(x_text, (popup_width - 25, 10))
+
+            #팝업창 "X"버튼을 누르면 팝업창이 닫히게 함
+            if event.type == pygame.MOUSEBUTTONDOWN and x_button.collidepoint(event.pos):
+                break
 
             # 팝업창에 "일시정지"와 "종료" 버튼 만들기
             pause_button = pygame.draw.rect(popup, WHITE, (int(popup_width / 2) - 50, int(popup_height / 2) - 50, 100, 30))
@@ -86,6 +100,7 @@ while True:
 
             # 팝업창 띄우기
             screen.blit(popup, (popup_x, popup_y))
+
 
  #           # 팝업창에 "Pause" 버튼 클릭 시 일시정지, "End Game" 버튼 클릭 시 'startPage.py'로 돌아가기
  #           while True:
