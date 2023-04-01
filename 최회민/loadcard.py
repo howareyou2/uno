@@ -37,7 +37,7 @@ class Card(pygame.sprite.Sprite):
     def rotation(self, rotate): # 카드 회전
         self.image = pygame.transform.rotate(self.image, rotate)
 
-    def getposition(self): # 카드 위치 획득
+    def getposition(self):
         return self.position
 
     def setposition(self, x, y): # 카드 위치 변경
