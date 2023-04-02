@@ -2,11 +2,14 @@ import shuffle
 import random
 import pygame
 
+#문제 우노와 와일드 드로우 4 둘다 게임도중구현??
 #추가 구현 우노 1장인데 걸리면 ->2장챙기기
+# 똑같이 우노버튼으로 만들고 1장이 아닌사람이 우노 버튼 누르면 1장인 사람 2장 챙기고
 #와일드 드로우 4 -> 낸사람 손에 그색 카드 없어야한다 -> 도전 / 도전자 6장, 공격자 4장
-#첫카드 드로우 4면다시
+
+
 #와일드 스왑 -> 교체후 색 고르기
-#점수 계산
+
 
 
 
@@ -95,7 +98,14 @@ def gameplay():
 
     #처음 카드 1장 버리기
     discards.append(unoDeck.pop(0))
+
+    #와일드 드로우 4인거 체크하기
+    while discards[0] == 'wild Draw Four':
+        unoDeck.append(discards.pop(0))
+        discards.append(unoDeck.pop(0))
+
     splitCard = discards[0].split("_", 1)
+
 
     #처음 카드색
     curruntcolour = splitCard[0]
@@ -186,6 +196,26 @@ def gameplay():
             playerTurn = 0
         elif playerTurn < 0:
             playerTurn = numPlayers - 1
+
+    #점수계산
+    #일반카드 숫자대로 / 와일드와 와일드 드로우4 50점/ 500점 나오면 전체 승리
+    #드로우2, 리버스, 스킵 20점
+    score = 0
+    for player in players:
+        for j in range(len(player)):
+            curruntcard = player[j].split("_", 1)
+            # 처음 카드색
+            if splitCard[0] == "whild":
+                score += 50
+            else:
+                if splitCard[1] == "Rerverse" or splitCard[1] == "Skip"  or splitCard[1] == "Draw Two":
+                    score += 20
+                else:
+                    score += splitCard[1]
+    #토탈 점수 계산해 500이상이면 완전끝
+                
+            
+            
 
     return winner
 
