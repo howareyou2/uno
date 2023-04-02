@@ -5,7 +5,14 @@ class UnoPlayer:
         self.hand = hand
     
     def play_card(self, top_card):
-        valid_cards = [card for card in self.hand if card.can_play_on(top_card)]
+        valid_cards = []
+        top_card_attribute=top_card.split('_')
+        for card in self.hand: # 핸드에 있는 모든 카드의 색깔과 숫자를 방금 나온 카드 색깔과 숫자를 비교해 유효한 카드 카드 선택
+            card_attribute=card.split('_')
+            if card_attribute[0]==top_card_attribute[0]:
+                valid_cards.append(card)     
+            elif card_attribute[1]==top_card_attribute[1]:
+                valid_cards.append(card) 
         if valid_cards:
             chosen_card = random.choice(valid_cards)
             self.hand.remove(chosen_card)
@@ -13,7 +20,7 @@ class UnoPlayer:
         else:
             return None
     
-    def draw_card(self, card):
+    def draw_card(self, card): # 낼 카드 없을 때 한장 드로우
         self.hand.append(card)
     
     def choose_color(self): # 색깔 변경 카드를 냈을 때 
