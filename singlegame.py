@@ -1,7 +1,6 @@
 import pygame
 import sys
 
-
 pygame.init()
 
 #'배경1.mp3' 파일 재생
@@ -21,39 +20,37 @@ BLUE = (0, 0, 255)
 LIGHT_PINK = (255, 182, 193)
 GRAY = (128, 128, 128)
 RED = (255, 0, 0)
+LIGHT_YELLOW = (255, 255, 153)
 
 #섹션1 크기, 테두리 설정, 배경사진'background.png' 
 section1_width = int(screen_width*0.80)
-section1_height = int(screen_height*0.70)
+section1_height = int(screen_height*0.60)
 section1 = pygame.Surface((section1_width, section1_height))
 
-background = pygame.image.load('./최회민/img/background.png')
+background = pygame.image.load('./이채은/image/singleBG_c.png')
 background = pygame.transform.scale(background, (section1_width, section1_height))
-section1.blit(background, (0, 0))
-pygame.draw.rect(section1, BLACK, (0, 0, section1_width, section1_height), 3) 
+section1.blit(background, (0, 0, 10, 10))
+pygame.draw.rect(section1, LIGHT_YELLOW, (0, 0, section1_width, section1_height), 3)
 
 #섹션1 왼쪽에 'BACK.png' 이미지 띄우기
 back = pygame.image.load('./최회민/img/BACK.png')
-back = pygame.transform.scale(back, (int(section1_width*0.18), int(section1_height*0.32)))
-section1.blit(back, (200, 180, 10, 10))
+back = pygame.transform.scale(back, (int(section1_width*0.20), int(section1_height*0.45)))
+section1.blit(back, (120, 110, 10, 10))
 
 #'BACK.png' 이미지 누르면 ~기능 구현?
 
-#섹션1 오른쪽에 'UNO.png' 이미지 띄우기
-uno = pygame.image.load('./이채은/image/UNO_button.png')
-uno = pygame.transform.scale(uno, (int(section1_width*0.12), int(section1_height*0.16)))
-section1.blit(uno, (510, 210, 10, 10))
+# 현재 색 표시 칸 구현
+pygame.draw.circle(section1, WHITE, (int(section1_width*0.8), int(section1_height*0.45)), int(section1_width*0.05), 0)
+pygame.draw.circle(section1, LIGHT_YELLOW, (int(section1_width*0.8), int(section1_height*0.45)), int(section1_width*0.05), 3)
 
-#'UNO.png' 이미지 누르면 ~기능 구현?
-
-
+# 색 표시 기능 구현
 
 #섹션2 크기, 배경색, 테두리 설정
 section2_width = int(screen_width*0.25)
 section2_height = section1_height
 section2 = pygame.Surface((section2_width, section2_height))
-section2.fill((0, 0, 0))
-pygame.draw.rect(section2, BLACK, (0, 0, section2_width, section2_height), 3)
+section2.fill((LIGHT_YELLOW))
+pygame.draw.rect(section2, LIGHT_YELLOW, (0, 0, section2_width, section2_height), 3)
  
 #플레이어별 위치 구현
 p_width = int(section2_width / 1.0) # Width of each rectangle, slightly smaller than section2
@@ -67,27 +64,28 @@ p4_rect = pygame.Rect((section2_width - p_width) / 2, p_height * 3 + p_spacing *
 p5_rect = pygame.Rect((section2_width - p_width) / 2, p_height * 4 + p_spacing * 5, p_width*0.789, p_height)
 p6_rect = pygame.Rect((section2_width - p_width) / 2, p_height * 5 + p_spacing * 6, p_width*0.789, p_height*0.87)
 
-#각 직사각형 배경색 설정
-pygame.draw.rect(section2, (255, 210, 0), p1_rect)
-pygame.draw.rect(section2, (255, 210, 0), p2_rect)
-pygame.draw.rect(section2, (255, 210, 0), p3_rect)
-pygame.draw.rect(section2, (255, 210, 0), p4_rect)
-pygame.draw.rect(section2, (255, 210, 0), p5_rect)
-pygame.draw.rect(section2, (255, 210, 0), p6_rect)
+#p에 모두 'se2.png' 이미지 띄우기
+se2 = pygame.image.load('./이채은/image/se2.png')
+se2 = pygame.transform.scale(se2, (int(p_width*0.789), int(p_height)))
+section2.blit(se2, (p1_rect.x, p1_rect.y, 10, 10))
+section2.blit(se2, (p2_rect.x, p2_rect.y, 10, 10))
+section2.blit(se2, (p3_rect.x, p3_rect.y, 10, 10))
+section2.blit(se2, (p4_rect.x, p4_rect.y, 10, 10))
+section2.blit(se2, (p5_rect.x, p5_rect.y, 10, 10))
+section2.blit(se2, (p6_rect.x, p6_rect.y, 10, 10))
 
 #섹션3 크기, 배경색, 테두리 설정
 section3_width = screen_width
-section3_height = int(screen_height*0.33)
+section3_height = int(screen_height*0.40)
 section3 = pygame.Surface((section3_width, section3_height))
-section3.fill((1, 201, 0))
-pygame.draw.rect(section3, BLACK, (0, 0, section3_width, section3_height), 3)
+section3.fill((255, 255, 255))
+pygame.draw.rect(section3, LIGHT_YELLOW, (0, 0, section3_width, section3_height), 3)
 
 #섹션3 우측 상단에 타이머 표시 칸 구현
 timer_width = int(section3_width*0.05)
 timer_height = int(section3_height*0.25)
 timer_x = section3_width - timer_width - 15
 timer_y = 10
-timer_rect = pygame.draw.rect(section3, (1, 201, 0), (timer_x, timer_y, timer_width, timer_height))
 
 #섹션3 우측 상단에 타이머 표시 칸 안에 "0" 텍스트 생성
 font = pygame.font.SysFont('comicsansms', 20)
@@ -96,6 +94,10 @@ text = font.render("0", True, RED)
 text_rect = text.get_rect(center=(timer_x + timer_width / 2, timer_y + timer_height / 2))
 section3.blit(text, text_rect)
 
+#섹션3 우측 중앙에 마지막 한장 남았을때 누르는 버튼 구현
+UNO_bt = pygame.image.load('./이채은/image/UNO_bt.png')
+UNO_bt = pygame.transform.scale(UNO_bt, (150,110))
+section3.blit(UNO_bt, (int(section3_width*0.72), int(section3_height*0.2), 10, 10))
 
 # 일시정지 및 종료 버튼 구현하고 "Pause" 텍스트 생성
 pause_button_width = 50
@@ -103,8 +105,9 @@ pause_button_height = 30
 pause_button_x = section1_width - pause_button_width - 10
 pause_button_y = 10
 
+#"pause_button"배경 흰색으로 설정
 WHITE = (255, 255, 255)
-pause_button_rect = pygame.draw.rect(section1, WHITE, (pause_button_x, pause_button_y, pause_button_width, pause_button_height))
+pause_button_rect = pygame.draw.rect(section1, LIGHT_YELLOW, (pause_button_x, pause_button_y, pause_button_width, pause_button_height), border_radius=10)
 
 font = pygame.font.SysFont('comicsansms', 15)
 bold_font = pygame.font.SysFont('comicsansms', 15, bold=True)
@@ -128,7 +131,7 @@ while True:
             pygame.quit()
             sys.exit()
 
-        #"pause"버튼을 누르면 '배경1.mp3' 음악이 일시정지
+        #"pause"버튼을 누르면 '배경.mp3'가 멈춘다.
         if event.type == pygame.MOUSEBUTTONDOWN:
             if pause_button_rect.collidepoint(event.pos):
                 pygame.mixer.music.pause()
