@@ -2,6 +2,10 @@ import pygame
 pygame.init()
 import settings
 
+#'배경.mp3' 파일을 불러와서 재생합니다.
+pygame.mixer.music.load('./이채은/sound/배경.mp3')
+pygame.mixer.music.play(-1)
+
 # Set up the window
 WIN_WIDTH = 800
 WIN_HEIGHT = 600
@@ -58,7 +62,8 @@ while running:
                 selected_item = (selected_item + 1) % len(menu_items)
             elif event.key == pygame.K_RETURN:
                 if selected_item == 0:
-                    print("Single player selected")
+                    import singlegame
+                    singlegame.single_game()
                 elif selected_item == 1:
                     settings.settings_screen()
                 elif selected_item == 2:
