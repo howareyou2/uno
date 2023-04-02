@@ -20,7 +20,7 @@ class UnoPlayer:
         else:
             return None
     
-    def draw_card(self, card): # 낼 카드 없을 때 한장 드로우
+    def draw_card(self, card): # 한장 드로우
         self.hand.append(card)
     
     def choose_color(self): # 색깔 변경 카드를 냈을 때 
