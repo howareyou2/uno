@@ -9,9 +9,14 @@ class UnoPlayer:
         top_card_attribute=top_card.split('_')
         for card in self.hand: # 핸드에 있는 모든 카드의 색깔과 숫자를 방금 나온 카드 색깔과 숫자를 비교해 유효한 카드 카드 선택
             card_attribute=card.split('_')
-            if card_attribute[0]==top_card_attribute[0]:
+            if top_card_attribute[1]=='SKILL': # 공격 카드인지 확인
+                if top_card_attribute[2]=='2':
+                    if card_attribute[1]=='SKILL':
+                        if card_attribute[2]=='2':
+                            valid_cards.append(card)
+            elif card_attribute[0]==top_card_attribute[0]: # 색이 같으면 추가
                 valid_cards.append(card)     
-            elif card_attribute[1]==top_card_attribute[1]:
+            elif card_attribute[1]==top_card_attribute[1]: # 모양이 같으면 추가
                 valid_cards.append(card) 
         if valid_cards:
             chosen_card = random.choice(valid_cards)
@@ -31,3 +36,6 @@ class UnoPlayer:
                 color_counts[card_attribute[0]] += 1
         chosen_color = max(color_counts, key=color_counts.get)
         return chosen_color if color_counts[chosen_color] > 0 else random.choice(['RED', 'YELLOW', 'GREEN', 'BLUE'])
+    
+    def gethand(self): # 우노 체크용 핸드의 수
+        return self.hand.len();
