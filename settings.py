@@ -85,7 +85,8 @@ def settings_screen():
         {"text": "Key Setting", "pos": (WIN_WIDTH // 2, 260)},
         {"text": "Color Blind Mode", "pos": (WIN_WIDTH // 2,320)},
         {"text": "Reset Settings", "pos": (WIN_WIDTH // 2, 380)},
-        {"text": "return", "pos": (WIN_WIDTH // 2, 440)}
+        {"text": "sound", "pos": (WIN_WIDTH // 2, 440)},
+        {"text": "return", "pos": (WIN_WIDTH // 2, 500)}
     ]
 
 
@@ -112,7 +113,7 @@ def settings_screen():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-
+            # 키보드 키 입력받는 부분
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
@@ -121,6 +122,7 @@ def settings_screen():
                 elif event.key == pygame.K_DOWN:
                     selected_item = (selected_item + 1) % len(menu_items)
                 elif event.key == pygame.K_RETURN:
+                    # 키보드로 박스 선택 , 위치순서대로
                     if selected_item == 0:
                         change_screen_size(cnt)
                         cnt = (cnt + 1) % 3
@@ -140,8 +142,12 @@ def settings_screen():
                         reset_settings()
 
                     elif selected_item == 4:
-                        running = False
+                        #사운드 기능추가
+                        print(1)
 
+                    elif selected_item == 5:
+                        running = False
+            #마우스 커서이동
             elif event.type == pygame.MOUSEMOTION:
                 cursor_rect.center = event.pos
 
@@ -152,7 +158,7 @@ def settings_screen():
                 if event.button == 1:
                     for i, item in enumerate(menu_items):
                         if cursor_rect.collidepoint(item["pos"]):
-                            # 세팅 버튼 클릭 시 처리
+                            # 세팅 버튼 클릭 시 처리, 위치 순서대로
                             selected_item = i
                             if selected_item == 0:
                                 change_screen_size(cnt)
@@ -164,6 +170,9 @@ def settings_screen():
                             elif selected_item == 3:
                                 reset_settings()
                             elif selected_item == 4:
+                                #사운드 기능추가
+                                print(1)
+                            elif selected_item == 5:
                                 running = False
         # Draw the menu
         win.fill(WHITE)
