@@ -76,6 +76,22 @@ def start_game():
     section2.blit(se2, (p5_rect.x, p5_rect.y, 10, 10))
     section2.blit(se2, (p6_rect.x, p6_rect.y, 10, 10))
 
+
+#섹션2 플레이어별 이름 표시
+    font = pygame.font.SysFont('comicsansms', 18)
+    text = font.render('Player1', True, BLACK)
+    section2.blit(text, (p1_rect.x + 10, p1_rect.y + 10, 10, 10))
+    text = font.render('Player2', True, BLACK)
+    section2.blit(text, (p2_rect.x + 10, p2_rect.y + 10, 10, 10))
+    text = font.render('Player3', True, BLACK)
+    section2.blit(text, (p3_rect.x + 10, p3_rect.y + 10, 10, 10))
+    text = font.render('Player4', True, BLACK)
+    section2.blit(text, (p4_rect.x + 10, p4_rect.y + 10, 10, 10))
+    text = font.render('Player5', True, BLACK)
+    section2.blit(text, (p5_rect.x + 10, p5_rect.y + 10, 10, 10))
+    text = font.render('Player6', True, BLACK)
+    section2.blit(text, (p6_rect.x + 10, p6_rect.y + 10, 10, 10))
+
     #섹션3 크기, 배경색, 테두리 설정
     section3_width = screen_width
     section3_height = int(screen_height*0.40)
@@ -96,24 +112,38 @@ def start_game():
     text_rect = text.get_rect(center=(timer_x + timer_width / 2, timer_y + timer_height / 2))
     section3.blit(text, text_rect)
 
-    #섹션3 우측 중앙에 마지막 한장 남았을때 누르는 버튼 구현
-    UNO_bt = pygame.image.load('./이채은/image/UNO_bt.png')
-    UNO_bt = pygame.transform.scale(UNO_bt, (150,110))
-    section3.blit(UNO_bt, (int(section3_width*0.72), int(section3_height*0.2), 10, 10))
+#섹션3 좌측 상단에 "Your turn" 텍스트 생성
+    font = pygame.font.SysFont('comicsansms', 20)
+    text = font.render("Your turn", True, BLACK)
+    text_rect = text.get_rect(center=(int(section3_width*0.1), int(section3_height*0.1)))
+    section3.blit(text, text_rect)
+
+    #"UNO!" 텍스트 생성
+    font = pygame.font.SysFont('comicsansms', 20)
+    bold_font = pygame.font.SysFont('comicsansms', 15, bold=True)
+    text = font.render("UNO!", True, BLACK)
+    text_rect = text.get_rect(center=(int(section3_width*0.23), int(section3_height*0.1)))
+    pygame.draw.rect(section3, RED, (text_rect.x - 5, text_rect.y - 5, text_rect.width + 10, text_rect.height + 10), 3)
+    section3.blit(text, text_rect)
+
+    ##섹션3 우측 중앙에 마지막 한장 남았을때 누르는 버튼 구현
+    #UNO_bt = pygame.image.load('./이채은/image/UNO_bt.png')
+    #UNO_bt = pygame.transform.scale(UNO_bt, (150,110))
+    #section3.blit(UNO_bt, (int(section3_width*0.72), int(section3_height*0.2), 10, 10))
 
     # 일시정지 및 종료 버튼 구현하고 "Pause" 텍스트 생성
-    pause_button_width = 50
+    pause_button_width = 30
     pause_button_height = 30
     pause_button_x = section1_width - pause_button_width - 10
     pause_button_y = 10
 
     #"pause_button"배경 흰색으로 설정
     WHITE = (255, 255, 255)
-    pause_button_rect = pygame.draw.rect(section1, LIGHT_YELLOW, (pause_button_x, pause_button_y, pause_button_width, pause_button_height), border_radius=10)
+    pause_button_rect = pygame.draw.rect(section1, LIGHT_YELLOW, (pause_button_x, pause_button_y, pause_button_width, pause_button_height))
 
     font = pygame.font.SysFont('comicsansms', 15)
     bold_font = pygame.font.SysFont('comicsansms', 15, bold=True)
-    text = font.render("Pause", True, BLACK)
+    text = bold_font.render("||", True, BLACK)
     text_rect = text.get_rect(center=(pause_button_x + pause_button_width / 2, pause_button_y + pause_button_height / 2))
     section1.blit(text, text_rect)
 
