@@ -143,7 +143,7 @@ def start_game():
 
     font = pygame.font.SysFont('comicsansms', 15)
     bold_font = pygame.font.SysFont('comicsansms', 15, bold=True)
-    text = font.render("||", True, BLACK)
+    text = bold_font.render("||", True, BLACK)
     text_rect = text.get_rect(center=(pause_button_x + pause_button_width / 2, pause_button_y + pause_button_height / 2))
     section1.blit(text, text_rect)
 
