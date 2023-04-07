@@ -3,8 +3,8 @@ import random
 class UNODeck:
     def __init__(self): 
         self.colors = ['RED', 'YELLOW', 'GREEN', 'BLUE']
-        self.values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'SKILL_0', 'SKILL_1', 'SKILL_2']
-        self.special_cards = ['BLACK_SKILL_3', 'BLACK_SKILL_4']
+        self.values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'SKIP', 'REVERSE', 'DRAW2']
+        self.special_cards = ['BLACK_CHANGE', 'BLACK_DRAW4']
         self.cards = []
         
         # Generate all the cards
