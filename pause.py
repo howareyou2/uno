@@ -5,8 +5,8 @@ def run_pause_screen(screen):
     screen.fill((255, 255, 255))
     
     font = pygame.font.SysFont("comicsansms", 20)
-    text = font.render("Close : space", True, (0, 0, 0))
-    #텍스트 위치 설정, 우측 하단에 위치
-    text_rect = text.get_rect(center=(screen.get_width() - 100, screen.get_height() - 50))
+    text = font.render("Continue: ESC", True, (220, 20, 60))
+    #텍스트 위치 설정, 좌측 상단 기준으로 10, 10만큼 떨어진 곳에 텍스트 출력
+    text_rect = text.get_rect(top = 10, left = 10)
     screen.blit(text, text_rect)
     pygame.display.flip()

@@ -101,7 +101,7 @@ def running_popup():
                     selected_in_popup_item = (selected_in_popup_item + 1) % len(popup_win_buttons)
                 elif event.key == pygame.K_RETURN:
                     if selected_in_popup_item == 0:
-                        # Only play button selected
+                        #singlegame으로 넘어가야함
                         singlegame.start_game()
                     elif selected_in_popup_item == 1:
                         # Story mode button selected
