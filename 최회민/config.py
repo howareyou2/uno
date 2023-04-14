@@ -1,6 +1,6 @@
 import configparser
 
-class config:
+class Configset:
     def __init__(self):
         self.cf=configparser.ConfigParser()
         self.cf.read('settings.ini')
