@@ -73,12 +73,6 @@ def settings_screen():
     # Create text surfaces
     title_text = title_font.render('settings', True, BLACK)
 
-    # Set up menu buttons
-    button_width = 200
-    button_height = 100
-    button_padding = 20
-
-
     # Define menu items
     menu_items = [
         {"text": "Screen Size", "pos": (WIN_WIDTH // 2, 200)},
