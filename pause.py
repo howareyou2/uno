@@ -107,7 +107,7 @@ def run_pause_screen(screen):
 
 #defining font
             font = pygame.font.SysFont('comicsansms', 20)
-            text = font.render("Continu : ESC", True, (220, 20, 60))
+            text = font.render("Continue : ESC", True, (220, 20, 60))
     #텍스트 위치 설정, 좌측 상단에 위치
             text_rect = text.get_rect(left=10, top=10)
             screen.blit(text, text_rect)
