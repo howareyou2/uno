@@ -35,3 +35,48 @@ class UNODeck:
     
     def getCards(self): # 분배하고 남은 카드
         return self.cards
+
+    def dealALL(self):
+        num_players=4
+        hands = [[] for _ in range(num_players)]
+        j=0
+        for i in range(103):
+            hands[j].append(self.cards.pop(0))
+            if j==3:
+                j=0
+            else:
+                j+=1
+        return hands 
+    
+    def storyshuffle(self): # 지역 A용 hands[0]=user hands[1]=computer
+        self.cards=[]
+        hands=[[] for _ in range(2)]
+        for color in self.colors:
+            for value in self.values:
+                self.cards.append(color + '_' + value)
+                if value != '0':
+                    self.cards.append(color + '_' + value)
+        for card in self.special_cards:
+            for i in range(4):
+                self.cards.append(card)
+        weighten=[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
+                15,15,15,15,15,15,
+                10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
+                15,15,15,15,15,15,
+                10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
+                15,15,15,15,15,15,
+                10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
+                15,15,15,15,15,15,15,15,15,15,15,15,15,15]
+        for _ in range(7):    
+            temp=random.choices(self.cards,weights=weighten,k=1)
+            temp_index=self.cards.index(temp[0])
+            self.cards.remove(temp[0])
+            weighten.pop(temp_index)
+            hands[1].append(temp[0])
+        random.shuffle(self.cards)
+        for _ in range(7):
+            hands[0].append(self.cards.pop(0))
+        
+        return hands
+                
+        
