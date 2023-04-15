@@ -32,21 +32,12 @@ def run_pause_screen(screen):
 
     # Create text surfaces
     title_text = title_font.render('pause!', True, BLACK)
-
-    font = pygame.font.SysFont("comicsansms", 20)
-    text = font.render("Continue: ESC", True, (220, 20, 60))
-    #텍스트 위치 설정, 좌측 상단 기준으로 10, 10만큼 떨어진 곳에 텍스트 출력
-    text_rect = text.get_rect(top = 10, left = 10)
-    screen.blit(text, text_rect)
-    pygame.display.flip()
-
-
+    
     # Define menu items
     menu_items = [
         {"text": "Restart", "pos": (WIN_WIDTH // 2, 280)},
         {"text": "EndGame", "pos": (WIN_WIDTH // 2,360)},
     ]
-
 
     # Set up the cursor
     cursor_img = pygame.Surface((20, 20))
@@ -78,9 +69,10 @@ def run_pause_screen(screen):
                     if selected_item == 0:
                         singlegame.start_game()
                     elif selected_item == 1:
-                        print(2)
+                        print(1)
 
-                        running = False
+
+                        
             #마우스 커서이동
             elif event.type == pygame.MOUSEMOTION:
                 cursor_rect.center = event.pos
@@ -97,8 +89,9 @@ def run_pause_screen(screen):
                             if selected_item == 0:
                                 singlegame.start_game()
                             elif selected_item == 1:
-                                print(2)
-                                running = False
+                                print(1)
+                                
+                            
                                 
         # Draw the menu
         win.fill(WHITE)
@@ -111,6 +104,13 @@ def run_pause_screen(screen):
                 # text=GRAY
                 text = menu_font.render(item["text"], True, BLACK if i == selected_item else GRAY)
             win.blit(text, rect)
+
+#defining font
+            font = pygame.font.SysFont('comicsansms', 20)
+            text = font.render("Continu : ESC", True, (220, 20, 60))
+    #텍스트 위치 설정, 좌측 상단에 위치
+            text_rect = text.get_rect(left=10, top=10)
+            screen.blit(text, text_rect)
 
         # 게임화면 업데이트
 
