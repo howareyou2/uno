@@ -59,14 +59,14 @@ class UNODeck:
         for card in self.special_cards:
             for i in range(4):
                 self.cards.append(card)
-        weighten=[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
-                15,15,15,15,15,15,
-                10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
-                15,15,15,15,15,15,
-                10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
-                15,15,15,15,15,15,
-                10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
-                15,15,15,15,15,15,15,15,15,15,15,15,15,15]
+        weighten=[]
+        for card in self.cards:
+            card_attribute=card.split('_')
+            if card_attribute[1]=='1' or card_attribute[1]=='2' or card_attribute[1]=='3' or card_attribute[1]=='4' or card_attribute[1]=='5'\
+               or card_attribute[1]=='6' or card_attribute[1]=='7' or card_attribute[1]=='8' or card_attribute[1]=='9' or card_attribute[1]=='0':
+                weighten.append(10)
+            else:
+                weighten.append(15)    
         for _ in range(7):    
             temp=random.choices(self.cards,weights=weighten,k=1)
             temp_index=self.cards.index(temp[0])
