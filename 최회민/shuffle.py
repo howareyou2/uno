@@ -49,16 +49,7 @@ class UNODeck:
         return hands 
     
     def storyshuffle(self): # 지역 A용 hands[0]=user hands[1]=computer
-        self.cards=[]
         hands=[[] for _ in range(2)]
-        for color in self.colors:
-            for value in self.values:
-                self.cards.append(color + '_' + value)
-                if value != '0':
-                    self.cards.append(color + '_' + value)
-        for card in self.special_cards:
-            for i in range(4):
-                self.cards.append(card)
         weighten=[]
         for card in self.cards:
             card_attribute=card.split('_')
