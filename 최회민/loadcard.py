@@ -15,7 +15,7 @@ class Card(pygame.sprite.Sprite):
         self.rect.center = self.position
 
     # 게임 구현에서 사용된 기능 카드 이동
-    def update(self, dest_loc):
+    def update(self, dest_loc): 
         x, y = self.position
         vx, vy = (dest_loc[0] - x, dest_loc[1] - y)
         vx, vy = (x/(x**2+y**2)**0.5, y/(x**2+y**2)**0.5)
@@ -71,3 +71,6 @@ class Card(pygame.sprite.Sprite):
 
     def get_name(self):
         return self.name
+
+    def transform(self):
+        self.image=pygame.transform.scale(self.image,(30,40))
