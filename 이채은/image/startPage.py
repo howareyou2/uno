@@ -3,6 +3,8 @@ pygame.init()
 import settings
 import singlegame
 
+
+
 #'배경.mp3' 파일을 불러와서 재생합니다.
 pygame.mixer.music.load('./이채은/sound/배경.mp3')
 pygame.mixer.music.play(-1)
@@ -107,7 +109,7 @@ def running_popup():
                         # Story mode button selected
                         import storymode1
                         storymode1.story_map1()
-                        #print("Story mode button selected")
+                        
                     popup_check = False
             elif event.type == pygame.MOUSEMOTION:
                 cursor_rect.center = event.pos
@@ -126,7 +128,6 @@ def running_popup():
                                 singlegame.start_game()
                             elif selected_in_popup_item == 1:
                                 storymode1.story_map1()
-                                #print("story mode")
                             popup_check = False
         # Draw popup window
         win.blit(popup_win, popup_win_rect)
