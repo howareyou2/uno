@@ -2,6 +2,7 @@ import pygame
 pygame.init()
 import settings
 import singlegame
+import modeChoosepage
 
 #'배경.mp3' 파일을 불러와서 재생합니다.
 pygame.mixer.music.load('./이채은/sound/배경.mp3')
@@ -12,6 +13,10 @@ WIN_WIDTH = 800
 WIN_HEIGHT = 600
 win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 pygame.display.set_caption("UNO")
+keybord = pygame.image.load("./이현정/키보드2.png")
+keybord = pygame.transform.scale(keybord, (150, 130))
+mouse = pygame.image.load("./이현정/마우스2.png")
+mouse = pygame.transform.scale(mouse,(150,150))
 
 # Define colors
 BLACK = (0, 0, 0)
@@ -41,108 +46,12 @@ menu_items = [
 
 # Set up the cursor
 cursor_img = pygame.Surface((20, 20))
-cursor_img.fill(WHITE)
+cursor_img.set_colorkey((0, 0, 0))
+# cursor_img.fill(WHITE)
 cursor_rect = cursor_img.get_rect()
 
 # Set up the menu
 selected_item = 0
-
-#Set up the menu in Popup
-selected_in_popup_item = 0
-
-#popup window check
-popup_check = False
-
-# Set up popup window
-popup_win_width = 300
-popup_win_height = 150
-popup_win = pygame.Surface((popup_win_width, popup_win_height))
-popup_win.fill(WHITE)
-popup_win_rect = popup_win.get_rect(center=(WIN_WIDTH//2, WIN_HEIGHT//2))
-
-# Set up popup window buttons
-popup_win_button_width = 100
-popup_win_button_height = 50
-popup_win_button_padding = 20
-
-popup_win_buttons = [
-    {"text": "Only Play", "pos": (popup_win_width//2, popup_win_button_padding)},
-    {"text": "Story Mode", "pos": (popup_win_width//2, popup_win_height//2+popup_win_button_padding)}
-]
-
-# Render button text surfaces and get their rects
-popup_win_button_rects = []
-for i, button in enumerate(popup_win_buttons):
-    button_surface = menu_font.render(button["text"], True, BLACK)
-    button_rect = button_surface.get_rect(center=button["pos"])
-    popup_win_buttons[i]["surface"] = button_surface  # Add text surface to button dict
-    popup_win_button_rects.append(button_rect)
-
-# Blit button text onto popup_win surface
-# for button in popup_win_buttons:
-#     popup_win.blit(button["surface"], button["surface"].get_rect(center=button["pos"]))
-
-# Define running_popup function
-def running_popup():
-    global popup_check, selected_in_popup_item
-    popup_check = True
-    selected_in_popup_item = 0
-    while popup_check:
-        # Handle events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                popup_check = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    popup_check = False
-                elif event.key == pygame.K_UP:
-                    selected_in_popup_item = (selected_in_popup_item - 1) % len(popup_win_buttons)
-                elif event.key == pygame.K_DOWN:
-                    selected_in_popup_item = (selected_in_popup_item + 1) % len(popup_win_buttons)
-                elif event.key == pygame.K_RETURN:
-                    if selected_in_popup_item == 0:
-                        #singlegame으로 넘어가야함
-                        singlegame.start_game()
-                    elif selected_in_popup_item == 1:
-                        # Story mode button selected
-                        import storymode1
-                        storymode1.story_map1()
-                        #print("Story mode button selected")
-                    popup_check = False
-            elif event.type == pygame.MOUSEMOTION:
-                cursor_rect.center = event.pos
-            # Handle mouse button down events
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                print("clicked!")
-                # Check if the mouse click is outside of the popup_win_rect
-                if not popup_win_rect.collidepoint(event.pos):
-                    popup_check = False
-                elif event.button == 1:
-                    for i, button_rect in enumerate(popup_win_buttons):
-                        if cursor_rect.collidepoint(button_rect["pos"]):
-                            selected_in_popup_item = i
-                            if selected_in_popup_item == 0:
-                                # Only play button selected
-                                singlegame.start_game()
-                            elif selected_in_popup_item == 1:
-                                storymode1.story_map1()
-                                #print("story mode")
-                            popup_check = False
-        # Draw popup window
-        win.blit(popup_win, popup_win_rect)
-
-        # Draw popup window buttons
-        for i, button in enumerate(popup_win_buttons):
-            button_surface = popup_menu_font.render(button["text"], True, BLACK if i == selected_in_popup_item else GRAY)
-            rect = button_surface.get_rect(center=button["pos"])
-            if rect.collidepoint(cursor_rect.center):
-                text = popup_menu_font.render(button["text"], True, BLACK if i == selected_in_popup_item else GRAY)
-            #pygame.draw.rect(win, color, button["surface"].get_rect(center=button["pos"]), 3)
-            #popup_win.blit(button["surface"], button["surface"].get_rect(center=button["pos"]))
-            popup_win.blit(button_surface, rect)
-
-        pygame.display.update()
-
 
 # Main game loop
 running = True
@@ -160,7 +69,7 @@ while running:
                 selected_item = (selected_item + 1) % len(menu_items)
             elif event.key == pygame.K_RETURN:
                 if selected_item == 0:
-                    running_popup()
+                    modeChoosepage.modeChoose()
                 elif selected_item == 1:
                     settings.settings_screen()
                 elif selected_item == 2:
@@ -173,11 +82,11 @@ while running:
             print("click!")
             if event.button == 1:
                 for i, item in enumerate(menu_items):
-                    if cursor_rect.collidepoint(item["pos"]):
-                        # text = menu_font.render(item["text"], True, BLACK if i == selected_item else GRAY)
+                    button_rect = pygame.Rect(item["pos"][0] - button_width/2, item["pos"][1] - button_height/2, button_width, button_height)
+                    if button_rect.collidepoint(event.pos):
                         selected_item = i
                         if selected_item == 0:
-                            running_popup()
+                            modeChoosepage.modeChoose()
                         elif selected_item == 1:
                             settings.settings_screen()
                         elif selected_item == 2:
@@ -188,6 +97,8 @@ while running:
     win.fill(WHITE)
     #pygame.draw.rect(win, GRAY, (WIN_WIDTH//2 - 150, 150, 300, 300))
     win.blit(title_text,((WIN_WIDTH - title_text.get_width()) / 2, 50))
+    win.blit(keybord,(50,25))
+    win.blit(mouse,(600,20))
     for i, item in enumerate(menu_items):
         text = menu_font.render(item["text"], True, BLACK if i == selected_item else GRAY)
         rect = text.get_rect(center=item["pos"])
