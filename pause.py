@@ -1,5 +1,5 @@
 import pygame
-import singlegame
+import 이채은.singlegame1 as singlegame1
 
 
 # Set up the window
@@ -67,7 +67,7 @@ def run_pause_screen(screen):
                 elif event.key == pygame.K_RETURN:
                     # 키보드로 박스 선택 , 위치순서대로
                     if selected_item == 0:
-                        singlegame.start_game()
+                        singlegame1.start_game()
                     elif selected_item == 1:
                         print(1)
 
@@ -87,7 +87,7 @@ def run_pause_screen(screen):
                             # 세팅 버튼 클릭 시 처리, 위치 순서대로
                             selected_item = i
                             if selected_item == 0:
-                                singlegame.start_game()
+                                singlegame1.start_game()
                             elif selected_item == 1:
                                 print(1)
                                 

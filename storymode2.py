@@ -169,7 +169,6 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 running = False
-                import singlegame
                 singlegame.start_game()
 
         pygame.display.update()
