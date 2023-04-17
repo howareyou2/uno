@@ -72,5 +72,5 @@ class Card(pygame.sprite.Sprite):
     def get_name(self):
         return self.name
 
-    def transform(self):
-        self.image=pygame.transform.scale(self.image,(30,40))
+    def transform(self,x,y):
+        self.image=pygame.transform.scale(self.image,(x,y))
