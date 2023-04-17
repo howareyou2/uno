@@ -1,6 +1,7 @@
 import pygame
 pygame.init()
 import singlegame
+import storymode1
 
 # Set up the window
 WIN_WIDTH = 800
@@ -31,9 +32,9 @@ def modeChoose():
     win.fill(WHITE)
 
     pygame.display.set_caption("UNO")
-    keybord = pygame.image.load("../백업/키보드2.png")
+    keybord = pygame.image.load("./이현정/키보드2.png")
     keybord = pygame.transform.scale(keybord, (150, 130))
-    mouse = pygame.image.load("../백업/마우스2.png")
+    mouse = pygame.image.load("./이현정/마우스2.png")
     mouse = pygame.transform.scale(mouse,(150,150))
 
     # Define fonts
@@ -84,7 +85,7 @@ def modeChoose():
                     if selected_item == 0:
                         singlegame.start_game()
                     elif selected_item == 1:
-                        print("Story Mode")
+                        storymode1.story_map1()
                     elif selected_item == 2:
                         running = False
 
@@ -101,7 +102,7 @@ def modeChoose():
                             if selected_item == 0:
                                 singlegame.start_game()
                             elif selected_item == 1:
-                                print("Story Mode")
+                                storymode1.story_map1()
                             elif selected_item == 2:
                                 running = False
 

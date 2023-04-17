@@ -13,9 +13,9 @@ WIN_WIDTH = 800
 WIN_HEIGHT = 600
 win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 pygame.display.set_caption("UNO")
-keybord = pygame.image.load("../백업/키보드2.png")
+keybord = pygame.image.load("./이현정/키보드2.png")
 keybord = pygame.transform.scale(keybord, (150, 130))
-mouse = pygame.image.load("../백업/마우스2.png")
+mouse = pygame.image.load("./이현정/마우스2.png")
 mouse = pygame.transform.scale(mouse,(150,150))
 
 # Define colors
