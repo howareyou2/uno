@@ -9,6 +9,8 @@ for item in player_deck: # player_deck 해당 컴퓨터의 카드 리스트
     i+=1
 player_group=pygame.sprite.RenderPlain(*temp_list)
 player_group.draw(screen)
+
+
 # 내거나 드로우 했을때 실행
 i=0
 for item in player_group:
