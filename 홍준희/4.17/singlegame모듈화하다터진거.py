@@ -656,8 +656,8 @@ def start_game():
 
             # re_text를 누르면 'singlegame.py'가 다시 실행
             if re_text_rect.collidepoint(event.pos):
-                import singlegame
-                singlegame.singlegame()
+                import 이채은.singlegame1 as singlegame1
+                singlegame1.singlegame()
 
             # co_text를 누르면 ex_text, re_text, co_text가 닫히고 '배경.mp3'가 다시 실행되며 게임이 이어서 진행됨
             # 계속 수정..

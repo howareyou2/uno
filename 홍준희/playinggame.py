@@ -5,7 +5,7 @@ import shuffle
 import config
 import loadcard
 import Computerplay
-import singlegame
+import 이채은.singlegame1 as singlegame1
 
 
 from loadcard import Card
@@ -76,7 +76,7 @@ def gameplay():
     screen = pygame.display.set_mode((screen_width, screen_height))
 
 
-    deck = loadcard.Card('./최회민/img/BACK.png', (int(singlegame.section1_width*0.20), int(singlegame.section1_height*0.45)))
+    deck = loadcard.Card('./최회민/img/BACK.png', (int(singlegame1.section1_width*0.20), int(singlegame1.section1_height*0.45)))
     back = pygame.image.load('./최회민/img/BACK.png')
 
     # 다음 턴

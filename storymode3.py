@@ -1,5 +1,5 @@
 import pygame
-import singlegame
+import 이채은.singlegame1 as singlegame1
 
 pygame.init()
 
@@ -195,7 +195,7 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 running = False
-                singlegame.start_game()
+                singlegame1.start_game()
 
         pygame.display.update()
     pygame.display.update()

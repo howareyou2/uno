@@ -101,8 +101,8 @@ def running_popup():
                 elif event.key == pygame.K_RETURN:
                     if selected_in_popup_item == 0:
                         # Only play button selected
-                        import singlegame
-                        singlegame.single_game()
+                        import 이채은.singlegame1 as singlegame1
+                        singlegame1.single_game()
                     elif selected_in_popup_item == 1:
                         # Story mode button selected
                         print("Story mode button selected")
@@ -121,8 +121,8 @@ def running_popup():
                             selected_in_popup_item = i
                             if selected_in_popup_item == 0:
                                 # Only play button selected
-                                import singlegame
-                                singlegame.single_game()
+                                import 이채은.singlegame1 as singlegame1
+                                singlegame1.single_game()
                             elif selected_in_popup_item == 1:
                                 print("story mode")
                             popup_check = False

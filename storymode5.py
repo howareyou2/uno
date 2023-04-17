@@ -1,5 +1,5 @@
 import pygame
-import singlegame
+import 이채은.singlegame1 as singlegame1
 
 pygame.init()
 
