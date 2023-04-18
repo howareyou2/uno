@@ -188,7 +188,8 @@ def story_map4():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     running = False
-                    singlegame.start_game()
+                    import storymodegame4
+                    storymodegame4.start_game()
                     
             pygame.display.update()
         pygame.display.update()
