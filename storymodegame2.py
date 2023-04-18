@@ -389,6 +389,10 @@ def start_game():
                 # 컴퓨터 승리조건
                 if len(players[playerTurn]) == 0:
                     running = False
+                    #사운드 재생
+                    pygame.mixer.music.load('./이채은/sound/lose.mp3')
+                    pygame.mixer.music.play(0)
+
                     print("finish")
                     winner = playerTurn + 1
 
