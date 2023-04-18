@@ -259,28 +259,8 @@ def start_game():
     # UNO_bt = pygame.transform.scale(UNO_bt, (150,110))
     # section3.blit(UNO_bt, (int(section3_width*0.72), int(section3_height*0.2), 10, 10))
 
-    # 일시정지 및 종료 버튼 구현하고 "Pause" 텍스트 생성
-    pause_button_width = 30
-    pause_button_height = 30
-    pause_button_x = section1_width - pause_button_width - 10
-    pause_button_y = 10
-
-    ##섹션3 우측 중앙에 마지막 한장 남았을때 누르는 버튼 구현
-    # UNO_bt = pygame.image.load('./이채은/image/UNO_bt.png')
-    # UNO_bt = pygame.transform.scale(UNO_bt, (150,110))
-    # section3.blit(UNO_bt, (int(section3_width*0.72), int(section3_height*0.2), 10, 10))
-
     # "pause_button"배경 흰색으로 설정
     WHITE = (255, 255, 255)
-    pause_button_rect = pygame.draw.rect(section1, LIGHT_YELLOW,
-                                         (pause_button_x, pause_button_y, pause_button_width, pause_button_height))
-
-    font = pygame.font.SysFont('comicsansms', 15)
-    bold_font = pygame.font.SysFont('comicsansms', 15, bold=True)
-    text = bold_font.render("||", True, BLACK)
-    text_rect = text.get_rect(
-        center=(pause_button_x + pause_button_width / 2, pause_button_y + pause_button_height / 2))
-    section1.blit(text, text_rect)
 
     # 일시정지 및 종료 버튼 구현하고 "Pause" 텍스트 생성
     pause_button = pygame.Rect(10, 10, 30, 30)
@@ -309,9 +289,6 @@ def start_game():
         return False
 
 
-
-
-
     # 게임 시작할 때
     print(players[0])
     print(discards[-1])
@@ -332,8 +309,8 @@ def start_game():
     #백 카드 스프라이트로 시도하기
 
     backcard = Card('BACK', (screen_width, screen_height))
-    backcard.transform(160,150)
-    backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
+    backcard.transform(132,160)
+    backcard.update((int(section1_width * 0.20), int(section1_height * 0.53)))
     backcard = pygame.sprite.RenderPlain(backcard)
     print(1)
     backcard.draw(screen)
@@ -555,45 +532,7 @@ def start_game():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-            # "Pause" 버튼을 누르면 게임이 일시정지
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                '''
-                if pause_button_rect.collidepoint(event.pos):
-                    pygame.time.wait(1000)
-                    pygame.display.update()
-                    # "Pause" 버튼을 누르면 "Continue", "Restart", "EndGame" 버튼 생성
-                    pygame.draw.rect(screen, WHITE, (300, 230, 180, 40))
-                    pygame.draw.rect(screen, WHITE, (300, 275, 180, 40))
-                    pygame.draw.rect(screen, WHITE, (300, 320, 180, 40))
-                    # 각각의 버튼에 "Continue", "Restart", "EndGame" 텍스트 생성
-                    co_text = font.render("Continue", True, BLACK)
-                    co_text_rect = co_text.get_rect(center=(300 + 150 / 2, 230 + 40 / 2))
-                    screen.blit(co_text, co_text_rect)
-                    re_text = font.render("Restart", True, BLACK)
-                    re_text_rect = re_text.get_rect(center=(300 + 165 / 2, 275 + 40 / 2))
-                    screen.blit(re_text, re_text_rect)
-                    ex_text = font.render("EndGame", True, BLACK)
-                    ex_text_rect = ex_text.get_rect(center=(300 + 140 / 2, 320 + 40 / 2))
-                    screen.blit(ex_text, ex_text_rect)
-                    pygame.display.flip()
-                # ex_text를 누르면 게임이 종료되고 'startPage.py'로 돌아감
-                if ex_text_rect.collidepoint(event.pos):
-                    running = False
-                # re_text를 누르면 'singlegame.py'가 다시 실행
-                if re_text_rect.collidepoint(event.pos):
-                    import singlegame
-                    singlegame.singlegame()
-                # co_text를 누르면 ex_text, re_text, co_text가 닫히고 '배경.mp3'가 다시 실행되며 게임이 이어서 진행됨
-                # 계속 수정..
-                if co_text_rect.collidepoint(event.pos):
-                    pygame.draw.rect(screen, (255, 255, 0), (300, 230, 180, 40))
-                    pygame.draw.rect(screen, (255, 255, 0), (300, 275, 180, 40))
-                    pygame.draw.rect(screen, (255, 255, 0), (300, 320, 180, 40))
-                    pygame.mixer.music.unpause()
-                    pygame.display.flip()
-                pygame.display.flip()
-                '''
-
+                    return
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if playerTurn == 0:
