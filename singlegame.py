@@ -11,6 +11,22 @@ import pause
 
 pygame.init()
 
+def change_turn(playDirection, numPlayers, playerTurn):
+    # 턴 이동
+    playerTurn += playDirection
+    if playerTurn == numPlayers:
+        playerTurn = 0
+    elif playerTurn < 0:
+        playerTurn = numPlayers - 1
+    return playerTurn
+
+def next_draw(numPlayers, playDirection, playerTurn):
+    playerDraw = playerTurn + playDirection
+    if playerDraw == numPlayers:
+        playerDraw = 0
+    elif playerDraw < 0:
+        playerDraw = numPlayers - 1
+    return playerDraw
 
 
 
@@ -313,8 +329,7 @@ def start_game():
 
 
     # 게임 시작할 때
-    print(players[0])
-    print(discards[-1])
+
     user_card = []
     for item in players[0]:
         cards = Card(item, (screen_width, screen_height))
@@ -335,7 +350,6 @@ def start_game():
     backcard.transform(160,150)
     backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
     backcard = pygame.sprite.RenderPlain(backcard)
-    print(1)
     backcard.draw(screen)
 
 
@@ -390,12 +404,8 @@ def start_game():
             if res == None:
                 players[playerTurn].extend(drawCards(1))
                 # 1장 추가되는거 이미지로 구현
-                # 턴 이동
-                playerTurn += playDirection
-                if playerTurn == numPlayers:
-                    playerTurn = 0
-                elif playerTurn < 0:
-                    playerTurn = numPlayers - 1
+                # 턴 변화
+                playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
 
             else:
@@ -429,42 +439,26 @@ def start_game():
                     if curruntcolour == "BLACK":
                         unoplayer = Computerplay.UnoPlayer(players[playerTurn])
                         newColour = unoplayer.choose_color(players[playerTurn])
-                        # curruntcolour = colours[newColour - 1]
                         curruntcolour = newColour
                     # 리버스면 다음턴 회전반대로
                     if cardVal == "REVERSE":
                         playDirection = playDirection * (-1)
                         if len(players) == 2:
-                            playerTurn += playDirection
-                            if playerTurn == numPlayers:
-                                playerTurn = 0
-                            elif playerTurn < 0:
-                                playerTurn = numPlayers - 1
+                            playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
                     # 스킵하기
                     elif cardVal == "SKIP":
-                        playerTurn += playDirection
-                        if playerTurn == numPlayers:
-                            playerTurn = 0
-                        elif playerTurn < 0:
-                            playerTurn = numPlayers - 1
+                        playerTurn = change_turn(playDirection, numPlayers, playerTurn)
                     # 2장 뽑기
                     elif splitCard[1] == "DRAW2":
-                        playerDraw = playerTurn + playDirection
-                        if playerDraw == numPlayers:
-                            playerDraw = 0
-                        elif playerDraw < 0:
-                            playerDraw = numPlayers - 1
+                        playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                         players[playerDraw].extend(drawCards(2))
-                        print(players[playerDraw])
-
 
                         #플레이어면 유저그룹 변하게
                         if playerDraw == 0:
                             # 화면다시 그리기
                             screen.blit(section3, (0, section1_height))
                             for i in range(2):
-
                                 tmp = Card(players[playerDraw][len(players[playerDraw])-2+i], (800, 600))
                                 user_group.add(tmp)
                                 # 플레이어 카드 변화
@@ -472,30 +466,21 @@ def start_game():
                             for item in user_group:
                                 item.update((50 + 50 * i, 500))
                                 i += 1
-                            print(user_group)
                             user_group.draw(screen)
                             pygame.display.update()
 
                     # 와일드 드로우 4
                     elif splitCard[1] == "DRAW4":
-                        print(1)
-                        playerDraw = playerTurn + playDirection
-                        if playerDraw == numPlayers:
-                            playerDraw = 0
-                        elif playerDraw < 0:
-                            playerDraw = numPlayers - 1
-                        players[playerDraw].extend(drawCards(4))
-                        print(players[playerDraw])
 
+                        playerDraw = next_draw(numPlayers, playDirection, playerTurn)
+                        players[playerDraw].extend(drawCards(4))
 
                         # 플레이어면 유저그룹 변하게
                         if playerDraw == 0:
-
                             # 화면다시 그리기
                             screen.blit(section3, (0, section1_height))
 
                             for i in range(4):
-
                                 tmp = Card(players[playerDraw][len(players[playerDraw])-4+i], (800, 600))
                                 user_group.add(tmp)
                                 # 플레이어 카드 변화
@@ -503,20 +488,11 @@ def start_game():
                             for item in user_group:
                                 item.update((50 + 50 * i, 500))
                                 i += 1
-                            print(user_group)
-                            print(players[playerDraw])
                             user_group.draw(screen)
                             pygame.display.update()
 
-
-
-                    # 턴 이동
-                    playerTurn += playDirection
-                    if playerTurn == numPlayers:
-                        playerTurn = 0
-                    elif playerTurn < 0:
-                        playerTurn = numPlayers - 1
-
+                    # 턴 변화
+                    playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
                     # top카드 이미지 변화
                     back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
@@ -539,16 +515,11 @@ def start_game():
                 i += 1
             player_group.draw(screen)
 
-
-
-
         # 사람인경우
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -595,8 +566,6 @@ def start_game():
                     pygame.display.flip()
                 pygame.display.flip()
                 '''
-
-
             if event.type == pygame.MOUSEBUTTONUP:
                 if playerTurn == 0:
                     print("top ", discards[-1], "player turn", playerTurn + 1)
@@ -615,6 +584,7 @@ def start_game():
                             item = players[playerTurn][-1]
                             lastcard1 = len(user_group.sprites())
                             temp = Card(item, (800, 600))
+                            user_group.add(temp)
                             '''
                             if lastcard1 > 8:
                                 x = 50 + screen_width / 10 * (lastcard1 - 8)
@@ -626,14 +596,9 @@ def start_game():
                             user_group.add(temp)
                             pygame.display.update()  # 화면 업데이트
                             '''
-                            user_group.add(temp)
 
-                            # 턴 이동
-                            playerTurn += playDirection
-                            if playerTurn == numPlayers:
-                                playerTurn = 0
-                            elif playerTurn < 0:
-                                playerTurn = numPlayers - 1
+                            #턴 변화
+                            playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
                             #화면다시 그리기
                             screen.blit(section3, (0, section1_height))
@@ -655,20 +620,13 @@ def start_game():
 
                                 # 카드 낼때
                                 discards.append(sprite.get_name())
-                                print(user_group,1)
-
-                                print(players[playerTurn],2)
                                 user_group.remove(sprite)  # 핸드에서 내려는 카드를 제거하고
-                                print(sprite.get_name(),3)
                                 players[playerTurn].remove(sprite.get_name())
-
 
                                 if len(players[playerTurn]) == 0:
                                     print("finish")
-
                                     running = False
                                     winner = playerTurn + 1
-
 
                                 #
                                 # for temp in user_group: # 남아있는 카드들에 대해
@@ -728,42 +686,22 @@ def start_game():
                                 if cardVal == "REVERSE":
                                     playDirection = playDirection * (-1)
                                     if len(players) == 2:
-                                        playerTurn += playDirection
-                                        if playerTurn == numPlayers:
-                                            playerTurn = 0
-                                        elif playerTurn < 0:
-                                            playerTurn = numPlayers - 1
+                                        playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
                                 # 스킵하기
                                 elif cardVal == "SKIP":
-                                    playerTurn += playDirection
-                                    if playerTurn == numPlayers:
-                                        playerTurn = 0
-                                    elif playerTurn < 0:
-                                        playerTurn = numPlayers - 1
+                                    playerTurn = change_turn(playDirection, numPlayers, playerTurn)
                                 # 2장 뽑기
                                 elif splitCard[1] == "DRAW2":
-                                    playerDraw = playerTurn + playDirection
-                                    if playerDraw == numPlayers:
-                                        playerDraw = 0
-                                    elif playerDraw < 0:
-                                        playerDraw = numPlayers - 1
+                                    playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                                     players[playerDraw].extend(drawCards(2))
                                 # 와일드 드로우 4
                                 elif splitCard[1] == "DRAW4":
-                                    playerDraw = playerTurn + playDirection
-                                    if playerDraw == numPlayers:
-                                        playerDraw = 0
-                                    elif playerDraw < 0:
-                                        playerDraw = numPlayers - 1
+                                    playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                                     players[playerDraw].extend(drawCards(4))
 
-                                # 턴 이동
-                                playerTurn += playDirection
-                                if playerTurn == numPlayers:
-                                    playerTurn = 0
-                                elif playerTurn < 0:
-                                    playerTurn = numPlayers - 1
+                                # 턴 변화
+                                playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
 
                                 # top카드 이미지 변화
@@ -778,7 +716,6 @@ def start_game():
                                 # 화면다시 그리기
                                 screen.blit(section3, (0, section1_height))
 
-
                                 #플레이어 카드 변화
                                 i = 0
                                 for item in user_group:
@@ -786,17 +723,7 @@ def start_game():
                                     i += 1
                                 user_group.draw(screen)
                                 pygame.display.update()
-
-
-
-
                                 break
-
-
-
-
-
-
 
     # 점수계산
     # 일반카드 숫자대로 / 와일드와 와일드 드로우4 50점/ 500점 나오면 전체 승리
@@ -818,3 +745,8 @@ def start_game():
     playerscore[playerTurn - 1] += score
     if playerscore[playerTurn - 1] >= 500:
         running= False
+
+
+
+
+
