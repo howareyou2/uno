@@ -72,7 +72,7 @@ def start_game():
     # 플레이어 인원 입력받기
 
     #일단 7명으로 임의로 지정
-    numPlayers = 2
+    numPlayers = 4
 
     # 플레이어 점수
     playerscore = []
@@ -329,6 +329,7 @@ def start_game():
 
 
     # 게임 시작할 때
+    #d
 
     user_card = []
     for item in players[0]:
@@ -341,6 +342,7 @@ def start_game():
         item.update((50 + 50 * i, 500))
         temp_list.append(item)
         i += 1
+
     user_group = pygame.sprite.RenderPlain(*temp_list)
     user_group.draw(screen)  # 그리기
 
@@ -356,6 +358,20 @@ def start_game():
 
 
     #컴퓨터 카드 그리기
+    for j in range(1, numPlayers):
+        temp_list = []
+        i = 0
+        for item in players[j]:  # player_deck 해당 컴퓨터의 카드 리스트
+            cards = Card('BACK', (1200, 500))
+            cards.transform(30, 40)
+            cards.update((810 + 100 / len(players[1]) * i, 105 * j-50))
+            temp_list.append(cards)
+            i += 1
+
+        player_group = pygame.sprite.RenderPlain(*temp_list)
+        player_group.draw(screen)
+
+    '''
     player_deck = []
     temp_list = []
     i = 0
@@ -367,6 +383,7 @@ def start_game():
         i += 1
     player_group = pygame.sprite.RenderPlain(*temp_list)
     player_group.draw(screen)
+    '''
 
     # top카드 이미지 변화
     back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
@@ -390,7 +407,7 @@ def start_game():
 
         # 0번 플레이어로 하고 나머지 컴퓨터로 하기
 
-        # 컴퓨터인 경우 먼저하기
+        # 컴퓨터인 경우 먼저하기f
         if playerTurn != 0:
             pygame.time.wait(700)
 
@@ -491,6 +508,23 @@ def start_game():
                             user_group.draw(screen)
                             pygame.display.update()
 
+                    #컴퓨터 카드변화
+                    screen.blit(section2, (section1_width, 0))
+                    # 컴퓨터 카드 그리기
+                    for j in range(1, numPlayers):
+                        temp_list = []
+                        i = 0
+                        for item in players[j]:  # player_deck 해당 컴퓨터의 카드 리스트
+                            cards = Card('BACK', (1200, 500))
+                            cards.transform(30, 40)
+                            cards.update((810 + 100 / len(players[1]) * i, 105 * j - 50))
+                            temp_list.append(cards)
+                            i += 1
+
+                        player_group = pygame.sprite.RenderPlain(*temp_list)
+                        player_group.draw(screen)
+                    pygame.display.update()
+
                     # 턴 변화
                     playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
@@ -503,17 +537,7 @@ def start_game():
                     # section1.blit(back, (300, 110, 10, 10))
                     pygame.display.update()
 
-            #여기 컴퓨터 카드변화 그리기
-            screen.blit(section2, (section1_width, 0))
-            player_group.remove()
-            for sprite in player_group:
-                player_group.remove(sprite)
-                break
 
-            for item in player_group:
-                item.update(((810 + 100 / len(player_group.sprites()) * i), 50))
-                i += 1
-            player_group.draw(screen)
 
         # 사람인경우
         for event in pygame.event.get():
@@ -695,10 +719,12 @@ def start_game():
                                 elif splitCard[1] == "DRAW2":
                                     playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                                     players[playerDraw].extend(drawCards(2))
+                                    #컴퓨터 카드 변화구현
                                 # 와일드 드로우 4
                                 elif splitCard[1] == "DRAW4":
                                     playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                                     players[playerDraw].extend(drawCards(4))
+                                    # 컴퓨터 카드 변화구현
 
                                 # 턴 변화
                                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
@@ -724,6 +750,23 @@ def start_game():
                                 user_group.draw(screen)
                                 pygame.display.update()
                                 break
+
+                                # 컴퓨터 카드변화
+                                screen.blit(section2, (section1_width, 0))
+                                # 컴퓨터 카드 그리기
+                                for j in range(1, numPlayers):
+                                    temp_list = []
+                                    i = 0
+                                    for item in players[j]:  # player_deck 해당 컴퓨터의 카드 리스트
+                                        cards = Card('BACK', (1200, 500))
+                                        cards.transform(30, 40)
+                                        cards.update((810 + 100 / len(players[1]) * i, 105 * j - 50))
+                                        temp_list.append(cards)
+                                        i += 1
+
+                                    player_group = pygame.sprite.RenderPlain(*temp_list)
+                                    player_group.draw(screen)
+                                pygame.display.update()
 
     # 점수계산
     # 일반카드 숫자대로 / 와일드와 와일드 드로우4 50점/ 500점 나오면 전체 승리
