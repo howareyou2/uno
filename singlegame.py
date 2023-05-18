@@ -8,8 +8,8 @@ import Computerplay
 from config import Configset
 import pause
 
-
 pygame.init()
+
 
 def change_turn(playDirection, numPlayers, playerTurn):
     # 턴 이동
@@ -20,6 +20,7 @@ def change_turn(playDirection, numPlayers, playerTurn):
         playerTurn = numPlayers - 1
     return playerTurn
 
+
 def next_draw(numPlayers, playDirection, playerTurn):
     playerDraw = playerTurn + playDirection
     if playerDraw == numPlayers:
@@ -29,9 +30,7 @@ def next_draw(numPlayers, playDirection, playerTurn):
     return playerDraw
 
 
-
 def start_game():
-
     # 카드뽑기 함수, top에서
     def drawCards(numCards):
         cardsDrawn = []
@@ -48,11 +47,12 @@ def start_game():
             elif colour in card or value in card:
                 return True
         return False
-    #플레이어 낸카드 가능한건지 체크하기
+
+    # 플레이어 낸카드 가능한건지 체크하기
     def check_card(colour, value, sprite):
         name = sprite.get_name()
         name = name.split('_')
-        if name[0] == 'BLACK' :
+        if name[0] == 'BLACK':
             return True
         elif name[0] == colour:
             return True
@@ -60,8 +60,6 @@ def start_game():
             return True
         else:
             return False
-
-
 
     # 버리는카드
     discards = []
@@ -71,7 +69,7 @@ def start_game():
 
     # 플레이어 인원 입력받기
 
-    #일단 7명으로 임의로 지정
+    # 일단 7명으로 임의로 지정
     numPlayers = 4
 
     # 플레이어 점수
@@ -95,14 +93,13 @@ def start_game():
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("UNO Game")
 
-
-
     # 다음 턴
     playerTurn = 0
     # 시계방향1 반시계방향 -1
     playDirection = 1
 
-
+    # Set up 유저 카드
+    selected_item = 0
 
     # 처음 카드 1장 버리기
     discards.append(card.pop(0))
@@ -124,8 +121,7 @@ def start_game():
     # 승자
     winner = -1
 
-
-    #'배경1.mp3' 파일 재생
+    # '배경1.mp3' 파일 재생
     pygame.mixer.music.load('./이채은/sound/배경1.mp3')
     pygame.mixer.music.play(-1)
     '''
@@ -154,32 +150,6 @@ def start_game():
     section1.blit(background, (0, 0, 10, 10))
     pygame.draw.rect(section1, LIGHT_YELLOW, (0, 0, section1_width, section1_height), 3)
 
-    '''
-    # 섹션1 왼쪽에 'BACK.png' 이미지 띄우기
-    back = pygame.image.load('./최회민/img/BACK.png')
-    back = pygame.transform.scale(back, (int(section1_width * 0.20), int(section1_height * 0.45)))
-    section1.blit(back, (120, 110, 10, 10))
-    
-
-    # 섹션1 왼쪽에 'BACK.png' 옆에 top카드 이미지 띄우기
-    top = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
-    top = pygame.transform.scale(top, (128, 162))
-    section1.blit(top, (300, 110, 10, 10))
-    '''
-
-    # # top카드 이미지 변화
-    # back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
-    # back = pygame.transform.scale(back, (128, 162))
-    # x = int(screen_width * 0.4)
-    # y = int(screen_height * 0.4)
-    # screen.blit(back, (x, y))
-    # # section1.blit(back, (300, 110, 10, 10))
-    # pygame.display.update()
-
-
-
-    # 'BACK.png' 이미지 누르면 ~기능 구현?
-
     # 현재 색 표시 칸 구현
     pygame.draw.circle(section1, WHITE, (int(section1_width * 0.8), int(section1_height * 0.45)),
                        int(section1_width * 0.05), 0)
@@ -207,13 +177,9 @@ def start_game():
     p5_rect = pygame.Rect((section2_width - p_width) / 2, p_height * 4 + p_spacing * 5, p_width * 0.789, p_height)
     p6_rect = pygame.Rect((section2_width - p_width) / 2, p_height * 5 + p_spacing * 6, p_width * 0.789, p_height)
 
-
-
-
-
-    #p에 모두 'se2.png' 이미지 띄우기
+    # p에 모두 'se2.png' 이미지 띄우기
     se2 = pygame.image.load('./이채은/image/se2.png')
-    se2 = pygame.transform.scale(se2, (int(p_width*0.789), int(p_height)))
+    se2 = pygame.transform.scale(se2, (int(p_width * 0.789), int(p_height)))
     section2.blit(se2, (p1_rect.x, p1_rect.y, 10, 10))
     section2.blit(se2, (p2_rect.x, p2_rect.y, 10, 10))
     section2.blit(se2, (p3_rect.x, p3_rect.y, 10, 10))
@@ -258,7 +224,10 @@ def start_game():
 
     # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
     font = pygame.font.SysFont('comicsansms', 20)
-    text = font.render("Your turn", True, BLACK)
+    if playerTurn == 0:
+        text = font.render("Your turn", True, BLACK)
+    else:
+        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
     text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
     section3.blit(text, text_rect)
 
@@ -324,12 +293,10 @@ def start_game():
             return True
         return False
 
-
-
-
-
     # 게임 시작할 때
-    #d
+    # 유저 카드 그리기
+
+    selected_card = 0  # 선택된 카드의 인덱스
 
     user_card = []
     for item in players[0]:
@@ -338,52 +305,38 @@ def start_game():
     i = 0
     temp_list = []
     for item in user_card:
-        #item.update((50 + (screen_width / 10) * i, (screen_height * 0.35) / 2))
+        # item.update((50 + (screen_width / 10) * i, (screen_height * 0.35) / 2))
         item.update((50 + 50 * i, 500))
+        if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+            item.update((50 + 50 * i, 470))
         temp_list.append(item)
         i += 1
 
     user_group = pygame.sprite.RenderPlain(*temp_list)
     user_group.draw(screen)  # 그리기
 
-    #백 카드 스프라이트로 시도하기
+    # 백 카드 스프라이트로 시도하기
 
     backcard = Card('BACK', (screen_width, screen_height))
-    backcard.transform(160,150)
+    backcard.transform(160, 150)
     backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
     backcard = pygame.sprite.RenderPlain(backcard)
     backcard.draw(screen)
 
-
-
-
-    #컴퓨터 카드 그리기
+    # 컴퓨터 카드 그리기
     for j in range(1, numPlayers):
         temp_list = []
         i = 0
         for item in players[j]:  # player_deck 해당 컴퓨터의 카드 리스트
             cards = Card('BACK', (1200, 500))
             cards.transform(30, 40)
-            cards.update((810 + 100 / len(players[1]) * i, 105 * j-50))
+            cards.update((810 + 100 / len(players[1]) * i, 105 * j - 50))
             temp_list.append(cards)
             i += 1
 
         player_group = pygame.sprite.RenderPlain(*temp_list)
         player_group.draw(screen)
 
-    '''
-    player_deck = []
-    temp_list = []
-    i = 0
-    for item in players[1]:  # player_deck 해당 컴퓨터의 카드 리스트
-        cards = Card('BACK', (1200, 500))
-        cards.transform(30, 40)
-        cards.update((810 + 100 / len(players[1]) * i, 50))
-        temp_list.append(cards)
-        i += 1
-    player_group = pygame.sprite.RenderPlain(*temp_list)
-    player_group.draw(screen)
-    '''
 
     # top카드 이미지 변화
     back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
@@ -403,15 +356,13 @@ def start_game():
     # 게임 루프 실행
     while running:
 
-
-
         # 0번 플레이어로 하고 나머지 컴퓨터로 하기
 
-        # 컴퓨터인 경우 먼저하기f
+        # 컴퓨터인 경우 먼저하기
         if playerTurn != 0:
             pygame.time.wait(700)
 
-            print("top ", discards[-1], "player turn",playerTurn+1)
+            print("top ", discards[-1], "player turn", playerTurn + 1)
 
             # 이함수 hand넘겨받는기능추가필요
             unoplayer = Computerplay.UnoPlayer(players[playerTurn])
@@ -423,6 +374,35 @@ def start_game():
                 # 1장 추가되는거 이미지로 구현
                 # 턴 변화
                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+
+                # 화면다시 그리기
+                screen.blit(section3, (0, section1_height))
+
+                # 플레이어 카드 변화
+                for i, item in enumerate(user_group):
+                    if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                        item.update((50 + 50 * i, 470))
+                    else:
+                        item.update((50 + 50 * i, 500))
+
+                user_group.draw(screen)
+
+                # playerTurn 화면표시
+                '''
+                font = pygame.font.SysFont('comicsansms', 20)
+                if playerTurn == 0:
+                    text = font.render("Your turn", True, BLACK)
+                else:
+                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+                text_rect = text.get_rect(
+                    center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                section3.blit(text, text_rect)
+                '''
+
+
+                pygame.display.update()
+
+
 
 
             else:
@@ -471,18 +451,20 @@ def start_game():
                         playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                         players[playerDraw].extend(drawCards(2))
 
-                        #플레이어면 유저그룹 변하게
+                        # 플레이어면 유저그룹 변하게
                         if playerDraw == 0:
                             # 화면다시 그리기
                             screen.blit(section3, (0, section1_height))
                             for i in range(2):
-                                tmp = Card(players[playerDraw][len(players[playerDraw])-2+i], (800, 600))
+                                tmp = Card(players[playerDraw][len(players[playerDraw]) - 2 + i], (800, 600))
                                 user_group.add(tmp)
-                                # 플레이어 카드 변화
-                            i = 0
-                            for item in user_group:
-                                item.update((50 + 50 * i, 500))
-                                i += 1
+                            # 플레이어 카드 변화
+                            for i, item in enumerate(user_group):
+                                if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                                    item.update((50 + 50 * i, 470))
+                                else:
+                                    item.update((50 + 50 * i, 500))
+
                             user_group.draw(screen)
                             pygame.display.update()
 
@@ -498,17 +480,21 @@ def start_game():
                             screen.blit(section3, (0, section1_height))
 
                             for i in range(4):
-                                tmp = Card(players[playerDraw][len(players[playerDraw])-4+i], (800, 600))
+                                tmp = Card(players[playerDraw][len(players[playerDraw]) - 4 + i], (800, 600))
                                 user_group.add(tmp)
                                 # 플레이어 카드 변화
-                            i = 0
-                            for item in user_group:
-                                item.update((50 + 50 * i, 500))
-                                i += 1
+                            # 플레이어 카드 변화
+                            for i, item in enumerate(user_group):
+                                if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                                    item.update((50 + 50 * i, 470))
+                                else:
+                                    item.update((50 + 50 * i, 500))
+
                             user_group.draw(screen)
                             pygame.display.update()
 
-                    #컴퓨터 카드변화
+
+                    # 컴퓨터 카드변화
                     screen.blit(section2, (section1_width, 0))
                     # 컴퓨터 카드 그리기
                     for j in range(1, numPlayers):
@@ -528,6 +514,35 @@ def start_game():
                     # 턴 변화
                     playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
+                    # 화면다시 그리기
+                    screen.blit(section3, (0, section1_height))
+
+                    # 플레이어 카드 변화
+                    for i, item in enumerate(user_group):
+                        if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                            item.update((50 + 50 * i, 470))
+                        else:
+                            item.update((50 + 50 * i, 500))
+
+                    user_group.draw(screen)
+
+                    # playerTurn 화면표시
+                    '''
+                    font = pygame.font.SysFont('comicsansms', 20)
+                    if playerTurn == 0:
+                        text = font.render("Your turn", True, BLACK)
+                    else:
+                        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+                    text_rect = text.get_rect(
+                        center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                    section3.blit(text, text_rect)
+                    '''
+
+
+                    pygame.display.update()
+
+
+
                     # top카드 이미지 변화
                     back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
                     back = pygame.transform.scale(back, (128, 162))
@@ -537,21 +552,161 @@ def start_game():
                     # section1.blit(back, (300, 110, 10, 10))
                     pygame.display.update()
 
-
-
         # 사람인경우
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    return
+
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                elif event.key == pygame.K_LEFT:  # 왼쪽 화살표 키가 눌렸을 때
+                    selected_card = (selected_card - 1) % len(user_group)
+                    # 화면다시 그리기
+                    screen.blit(section3, (0, section1_height))
+                    # 플레이어 카드 변화
+                    for i, item in enumerate(user_group):
+                        if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                            item.update((50 + 50 * i, 470))
+                        else:
+                            item.update((50 + 50 * i, 500))
+
+                    user_group.draw(screen)
+                    pygame.display.update()
+
+
+                elif event.key == pygame.K_RIGHT:  # 오른쪽 화살표 키가 눌렸을 때
+                    selected_card = (selected_card + 1) % len(user_group)
+                    # 화면다시 그리기
+                    screen.blit(section3, (0, section1_height))
+
+
+                    # 플레이어 카드 변화
+                    for i, item in enumerate(user_group):
+                        if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                            item.update((50 + 50 * i, 470))
+                        else:
+                            item.update((50 + 50 * i, 500))
+
+                    user_group.draw(screen)
+                    pygame.display.update()
+
+
+                elif event.key == pygame.K_RETURN:  # enter 키가 눌렸을 때
+                    if playerTurn == 0:
+
+                        for i, sprite in enumerate(user_group):
+                            if i == selected_card:
+                                if check_card(curruntcolour, cardVal, sprite):
+                                    # 카드 낼때
+                                    discards.append(sprite.get_name())
+                                    user_group.remove(sprite)  # 핸드에서 내려는 카드를 제거하고
+                                    players[playerTurn].remove(sprite.get_name())
+
+                                    if len(players[playerTurn]) == 0:
+                                        print("finish")
+                                        running = False
+                                        winner = playerTurn + 1
+                                    # 버린카드 특별카드 체크
+                                    splitCard = discards[-1].split("_", 1)
+                                    curruntcolour = splitCard[0]
+
+                                    # 와일드면 카드값에 any부여
+                                    if curruntcolour == "BLACK":
+                                        cardVal = "Any"
+                                    else:
+                                        cardVal = splitCard[1]
+                                    # 와읻드면 색 선택하게
+                                    if curruntcolour == "BLACK":
+                                        unoplayer = Computerplay.UnoPlayer(players[playerTurn])
+                                        newColour = unoplayer.choose_color(players[playerTurn])
+                                        curruntcolour = newColour
+
+                                    # 리버스면 다음턴 회전반대로
+                                    if cardVal == "REVERSE":
+                                        playDirection = playDirection * (-1)
+                                        if len(players) == 2:
+                                            playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+
+                                    # 스킵하기
+                                    elif cardVal == "SKIP":
+                                        playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                                    # 2장 뽑기
+                                    elif splitCard[1] == "DRAW2":
+                                        playerDraw = next_draw(numPlayers, playDirection, playerTurn)
+                                        players[playerDraw].extend(drawCards(2))
+                                        # 컴퓨터 카드 변화구현
+                                    # 와일드 드로우 4
+                                    elif splitCard[1] == "DRAW4":
+                                        playerDraw = next_draw(numPlayers, playDirection, playerTurn)
+                                        players[playerDraw].extend(drawCards(4))
+                                        # 컴퓨터 카드 변화구현
+
+                                    # 턴 변화
+                                    playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+
+
+
+                                    # top카드 이미지 변화
+                                    back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
+                                    back = pygame.transform.scale(back, (128, 162))
+                                    x = int(screen_width * 0.4)
+                                    y = int(screen_height * 0.4)
+                                    screen.blit(back, (300, 110, 10, 10))
+                                    # section1.blit(back, (300, 110, 10, 10))
+                                    pygame.display.update()
+
+                                    # 화면다시 그리기
+                                    screen.blit(section3, (0, section1_height))
+
+                                    # 플레이어 카드 변화
+                                    for i, item in enumerate(user_group):
+                                        if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                                            item.update((50 + 50 * i, 470))
+                                        else:
+                                            item.update((50 + 50 * i, 500))
+
+                                    user_group.draw(screen)
+                                    pygame.display.update()
+
+                                    break
+                                    '''
+                                    # playerTurn 화면표시
+                                    font = pygame.font.SysFont('comicsansms', 20)
+                                    if playerTurn == 0:
+                                        text = font.render("Your turn", True, BLACK)
+                                    else:
+                                        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+                                    text_rect = text.get_rect(
+                                        center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                                    section3.blit(text, text_rect)
+
+                                    pygame.display.update()
+                                    '''
+
+
+                                    # 컴퓨터 카드변화
+                                    screen.blit(section2, (section1_width, 0))
+                                    # 컴퓨터 카드 그리기
+                                    for j in range(1, numPlayers):
+                                        temp_list = []
+                                        i = 0
+                                        for item in players[j]:  # player_deck 해당 컴퓨터의 카드 리스트
+                                            cards = Card('BACK', (1200, 500))
+                                            cards.transform(30, 40)
+                                            cards.update((810 + 100 / len(players[1]) * i, 105 * j - 50))
+                                            temp_list.append(cards)
+                                            i += 1
+
+                                        player_group = pygame.sprite.RenderPlain(*temp_list)
+                                        player_group.draw(screen)
+                                    pygame.display.update()
+
+
+
             # "Pause" 버튼을 누르면 게임이 일시정지
             if event.type == pygame.MOUSEBUTTONDOWN:
                 '''
@@ -594,13 +749,11 @@ def start_game():
                 if playerTurn == 0:
                     print("top ", discards[-1], "player turn", playerTurn + 1)
                     mouse_pos = pygame.mouse.get_pos()
-                    deck = loadcard.Card('BACK', (350,300))
-                    deck_group=pygame.sprite.RenderPlain(deck)
+                    deck = loadcard.Card('BACK', (350, 300))
+                    deck_group = pygame.sprite.RenderPlain(deck)
                     # 이건 덱에서 카드 뽑기
                     for sprite in backcard:
                         if sprite.get_rect().collidepoint(mouse_pos):
-
-
                             # 카드선택할 수 없으면
                             players[playerTurn].extend(drawCards(1))
 
@@ -609,31 +762,33 @@ def start_game():
                             lastcard1 = len(user_group.sprites())
                             temp = Card(item, (800, 600))
                             user_group.add(temp)
-                            '''
-                            if lastcard1 > 8:
-                                x = 50 + screen_width / 10 * (lastcard1 - 8)
-                                y = screen_height * 0.35
-                            else:
-                                x = 50 + screen_width / 10 * lastcard1
-                                y = screen_height * 0.35 / 2
-                            temp.setposition(x, y)
-                            user_group.add(temp)
-                            pygame.display.update()  # 화면 업데이트
-                            '''
-
-                            #턴 변화
+                            # 턴 변화
                             playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
-                            #화면다시 그리기
-                            screen.blit(section3, (0, section1_height))
 
+                            # 화면다시 그리기
+                            screen.blit(section3, (0, section1_height))
                             # 플레이어 카드 변화
-                            i = 0
-                            for item in user_group:
-                                item.update((50 + 50 * i, 500))
-                                i += 1
+                            for i, item in enumerate(user_group):
+                                if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                                    item.update((50 + 50 * i, 470))
+                                else:
+                                    item.update((50 + 50 * i, 500))
                             user_group.draw(screen)
+
+
+                            # playerTurn 화면표시
+                            '''
+                            font = pygame.font.SysFont('comicsansms', 20)
+                            if playerTurn == 0:
+                                text = font.render("Your turn", True, BLACK)
+                            else:
+                                text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+                            text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                            section3.blit(text, text_rect)
+                            '''
                             pygame.display.update()
+
 
                             break
 
@@ -641,56 +796,17 @@ def start_game():
                     for sprite in user_group:
                         if sprite.get_rect().collidepoint(mouse_pos):
                             if check_card(curruntcolour, cardVal, sprite):
-
                                 # 카드 낼때
                                 discards.append(sprite.get_name())
                                 user_group.remove(sprite)  # 핸드에서 내려는 카드를 제거하고
                                 players[playerTurn].remove(sprite.get_name())
-
                                 if len(players[playerTurn]) == 0:
                                     print("finish")
                                     running = False
                                     winner = playerTurn + 1
-
-                                #
-                                # for temp in user_group: # 남아있는 카드들에 대해
-                                #     temp.move(sprite.getposition()) # 제거한 카드의 위치에 대해 빈자리를 채우게 카드 이동
-                                # sprite.setposition(430, 300)
-                                # pygame.display.update()  # 화면 업데이트
-
-                                # top카드 이미지 변화
-                                #print(sprite.get_name())
-                                #print(discards)
-
-                                '''
-                                #print(discards[-1],11,"그만 좀 허락해줘")
-                                top = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
-                                top = pygame.transform.scale(top,
-                                                              (int(section1_width * 0.20),
-                                                               int(section1_height * 0.45)))
-                                section1.blit(top, (300, 110, 10, 10))
-                                pygame.display.update()
-                                '''
-                                '''
-                                # 플레이어의 카드 변화
-                                item = players[playerTurn][-1]
-                                lastcard1 = len(user_group)
-                                temp = Card(item, (120, 110))
-                                if lastcard1 > 8:
-                                    x = 50 + screen_width / 10 * (lastcard1 - 8)
-                                    y = screen_height * 0.35
-                                else:
-                                    x = 50 + screen_width / 10 * lastcard1
-                                    y = screen_height * 0.35 / 2
-                                temp.setposition(x, y)
-                                user_group.add(temp)
-                                pygame.display.update()  # 화면 업데이트
-                                '''
-
                                 # 버린카드 특별카드 체크
                                 splitCard = discards[-1].split("_", 1)
                                 curruntcolour = splitCard[0]
-
                                 # 와일드면 카드값에 any부여
                                 if curruntcolour == "BLACK":
                                     cardVal = "Any"
@@ -702,10 +818,6 @@ def start_game():
                                     newColour = unoplayer.choose_color(players[playerTurn])
                                     curruntcolour = newColour
 
-                                    '''
-                                    newColour = Computerplay.UnoPlayer.choose_color(players[playerTurn])
-                                    curruntcolour = colours[newColour - 1]
-                                    '''
                                 # 리버스면 다음턴 회전반대로
                                 if cardVal == "REVERSE":
                                     playDirection = playDirection * (-1)
@@ -719,7 +831,7 @@ def start_game():
                                 elif splitCard[1] == "DRAW2":
                                     playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                                     players[playerDraw].extend(drawCards(2))
-                                    #컴퓨터 카드 변화구현
+                                    # 컴퓨터 카드 변화구현
                                 # 와일드 드로우 4
                                 elif splitCard[1] == "DRAW4":
                                     playerDraw = next_draw(numPlayers, playDirection, playerTurn)
@@ -728,7 +840,6 @@ def start_game():
 
                                 # 턴 변화
                                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
-
 
                                 # top카드 이미지 변화
                                 back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
@@ -742,12 +853,27 @@ def start_game():
                                 # 화면다시 그리기
                                 screen.blit(section3, (0, section1_height))
 
-                                #플레이어 카드 변화
-                                i = 0
-                                for item in user_group:
-                                    item.update((50 + 50 * i, 500))
-                                    i += 1
+                                # 플레이어 카드 변화
+                                for i, item in enumerate(user_group):
+                                    if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                                        item.update((50 + 50 * i, 470))
+                                    else:
+                                        item.update((50 + 50 * i, 500))
+
                                 user_group.draw(screen)
+
+                                # playerTurn 화면표시
+                                '''
+                                font = pygame.font.SysFont('comicsansms', 20)
+                                if playerTurn == 0:
+                                    text = font.render("Your turn", True, BLACK)
+                                else:
+                                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+                                text_rect = text.get_rect(
+                                    center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                                section3.blit(text, text_rect)
+                                '''
+
                                 pygame.display.update()
                                 break
 
@@ -787,7 +913,7 @@ def start_game():
     # 토탈 점수 계산해 500이상이면 완전끝
     playerscore[playerTurn - 1] += score
     if playerscore[playerTurn - 1] >= 500:
-        running= False
+        running = False
 
 
 
