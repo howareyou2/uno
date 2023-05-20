@@ -7,9 +7,10 @@ from loadcard import Card
 import Computerplay
 from config import Configset
 import pause
-
+import datetime
 
 pygame.init()
+
 
 def change_turn(playDirection, numPlayers, playerTurn):
     # 턴 이동
@@ -20,6 +21,19 @@ def change_turn(playDirection, numPlayers, playerTurn):
         playerTurn = numPlayers - 1
     return playerTurn
 
+# 텍스트 생성 함수
+def render_timer():
+    current_time = datetime.datetime.now()
+    time_left = end_time - current_time
+    if time_left.total_seconds() <= 0:
+        text = bold_font.render("Time's up!", True, (255, 0, 0))
+    else:
+        seconds_left = int(time_left.total_seconds())
+        text = font.render(str(seconds_left), True, (0, 0, 0))
+    text_rect = text.get_rect(center=(timer_x + timer_width / 2, timer_y + timer_height / 2))
+    section3.blit(text, text_rect)
+
+
 def next_draw(numPlayers, playDirection, playerTurn):
     playerDraw = playerTurn + playDirection
     if playerDraw == numPlayers:
@@ -29,9 +43,7 @@ def next_draw(numPlayers, playDirection, playerTurn):
     return playerDraw
 
 
-
 def start_game():
-
     # 카드뽑기 함수, top에서
     def drawCards(numCards):
         cardsDrawn = []
@@ -48,11 +60,12 @@ def start_game():
             elif colour in card or value in card:
                 return True
         return False
-    #플레이어 낸카드 가능한건지 체크하기
+
+    # 플레이어 낸카드 가능한건지 체크하기
     def check_card(colour, value, sprite):
         name = sprite.get_name()
         name = name.split('_')
-        if name[0] == 'BLACK' :
+        if name[0] == 'BLACK':
             return True
         elif name[0] == colour:
             return True
@@ -60,8 +73,6 @@ def start_game():
             return True
         else:
             return False
-
-
 
     # 버리는카드
     discards = []
@@ -71,8 +82,8 @@ def start_game():
 
     # 플레이어 인원 입력받기
 
-    #일단 7명으로 임의로 지정
-    numPlayers = 2
+    # 일단 7명으로 임의로 지정
+    numPlayers = 4
 
     # 플레이어 점수
     playerscore = []
@@ -87,6 +98,7 @@ def start_game():
 
     card = unodeck.getCards()
 
+
     # 이전 저장파일 불러오기
     cf = Configset()
     default = cf.getChange()
@@ -95,14 +107,13 @@ def start_game():
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("UNO Game")
 
-
-
     # 다음 턴
     playerTurn = 0
     # 시계방향1 반시계방향 -1
     playDirection = 1
 
-
+    # Set up 유저 카드
+    selected_item = 0
 
     # 처음 카드 1장 버리기
     discards.append(card.pop(0))
@@ -124,8 +135,7 @@ def start_game():
     # 승자
     winner = -1
 
-
-    #'배경1.mp3' 파일 재생
+    # '배경1.mp3' 파일 재생
     pygame.mixer.music.load('./이채은/sound/배경1.mp3')
     pygame.mixer.music.play(-1)
     '''
@@ -142,6 +152,7 @@ def start_game():
     LIGHT_PINK = (255, 182, 193)
     GRAY = (128, 128, 128)
     RED = (255, 0, 0)
+    GREEN = (0, 255, 0)  # 녹색 추가
     LIGHT_YELLOW = (255, 255, 153)
 
     # 섹션1 크기, 테두리 설정, 배경사진'background.png'
@@ -153,38 +164,48 @@ def start_game():
     background = pygame.transform.scale(background, (section1_width, section1_height))
     section1.blit(background, (0, 0, 10, 10))
     pygame.draw.rect(section1, LIGHT_YELLOW, (0, 0, section1_width, section1_height), 3)
-
     '''
-    # 섹션1 왼쪽에 'BACK.png' 이미지 띄우기
-    back = pygame.image.load('./최회민/img/BACK.png')
-    back = pygame.transform.scale(back, (int(section1_width * 0.20), int(section1_height * 0.45)))
-    section1.blit(back, (120, 110, 10, 10))
-    
-
-    # 섹션1 왼쪽에 'BACK.png' 옆에 top카드 이미지 띄우기
-    top = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
-    top = pygame.transform.scale(top, (128, 162))
-    section1.blit(top, (300, 110, 10, 10))
-    '''
-
-    # # top카드 이미지 변화
-    # back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
-    # back = pygame.transform.scale(back, (128, 162))
-    # x = int(screen_width * 0.4)
-    # y = int(screen_height * 0.4)
-    # screen.blit(back, (x, y))
-    # # section1.blit(back, (300, 110, 10, 10))
-    # pygame.display.update()
-
-
-
-    # 'BACK.png' 이미지 누르면 ~기능 구현?
-
     # 현재 색 표시 칸 구현
+
     pygame.draw.circle(section1, WHITE, (int(section1_width * 0.8), int(section1_height * 0.45)),
                        int(section1_width * 0.05), 0)
     pygame.draw.circle(section1, LIGHT_YELLOW, (int(section1_width * 0.8), int(section1_height * 0.45)),
                        int(section1_width * 0.05), 3)
+    pygame.draw.circle(section1, GREEN, (int(section1_width * 0.8), int(section1_height * 0.45)),
+                       int(section1_width * 0.05), 0)
+    '''
+    # 현재 색 표시 칸 구현
+    if curruntcolour == 'BLUE':
+        pygame.draw.circle(section1, BLUE,
+                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                           int(section1_width * 0.05), 0)
+    elif curruntcolour == 'RED':
+        pygame.draw.circle(section1, RED,
+                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                           int(section1_width * 0.05), 0)
+    elif curruntcolour == 'YELLOW':
+        pygame.draw.circle(section1, LIGHT_YELLOW,
+                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                           int(section1_width * 0.05), 0)
+    elif curruntcolour == 'GREEN':
+        pygame.draw.circle(section1, GREEN,
+                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                           int(section1_width * 0.05), 0)
+
+    # Inside your game loop where you want to draw the text
+    len(card)
+    font = pygame.font.Font(None, 24)
+    card_count_text = str(len(card))  # convert the card count to string
+    text_surface = font.render(card_count_text, True, BLACK)  # render the text
+    text_rect = text_surface.get_rect(
+        center=(int(section1_width * 0.8), int(section1_height * 0.45)))  # get the rect for positioning
+    section1.blit(text_surface, text_rect)  # draw the text to the section1 surface
+    pygame.display.update()
+
+
+
+
+
 
     # 색 표시 기능 구현
 
@@ -207,13 +228,9 @@ def start_game():
     p5_rect = pygame.Rect((section2_width - p_width) / 2, p_height * 4 + p_spacing * 5, p_width * 0.789, p_height)
     p6_rect = pygame.Rect((section2_width - p_width) / 2, p_height * 5 + p_spacing * 6, p_width * 0.789, p_height)
 
-
-
-
-
-    #p에 모두 'se2.png' 이미지 띄우기
+    # p에 모두 'se2.png' 이미지 띄우기
     se2 = pygame.image.load('./이채은/image/se2.png')
-    se2 = pygame.transform.scale(se2, (int(p_width*0.789), int(p_height)))
+    se2 = pygame.transform.scale(se2, (int(p_width * 0.789), int(p_height)))
     section2.blit(se2, (p1_rect.x, p1_rect.y, 10, 10))
     section2.blit(se2, (p2_rect.x, p2_rect.y, 10, 10))
     section2.blit(se2, (p3_rect.x, p3_rect.y, 10, 10))
@@ -236,6 +253,8 @@ def start_game():
     text = font.render('Player6', True, BLACK)
     section2.blit(text, (p6_rect.x + 10, p6_rect.y + 10, 10, 10))
 
+
+
     # 섹션3 크기, 배경색, 테두리 설정
     section3_width = section1_width
     section3_height = int(screen_height * 0.40)
@@ -256,11 +275,35 @@ def start_game():
     text_rect = text.get_rect(center=(timer_x + timer_width / 2, timer_y + timer_height / 2))
     section3.blit(text, text_rect)
 
+    '''
     # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
     font = pygame.font.SysFont('comicsansms', 20)
-    text = font.render("Your turn", True, BLACK)
+    if playerTurn == 0:
+        text = font.render("Your turn", True, BLACK)
+    else:
+        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
     text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
     section3.blit(text, text_rect)
+    '''
+
+    # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+    font = pygame.font.SysFont('comicsansms', 20)
+    if playerTurn == 0:
+        text = font.render("Your turn", True, BLACK)
+    else:
+        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+    text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+    # Draw a rectangle with white color as background
+    background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10, text_rect.width + 20,
+                                  text_rect.height + 20)  # create a larger rect for the background
+    pygame.draw.rect(section3, WHITE, background_rect)  # draw the rect to the section3 surface
+
+    # Now draw the text
+    section3.blit(text, text_rect)
+
+    pygame.display.update()
 
     # "UNO!" 텍스트 생성
     font = pygame.font.SysFont('comicsansms', 20)
@@ -269,6 +312,23 @@ def start_game():
     text_rect = text.get_rect(center=(int(section3_width * 0.23), int(section3_height * 0.1)))
     pygame.draw.rect(section3, RED, (text_rect.x - 5, text_rect.y - 5, text_rect.width + 10, text_rect.height + 10), 3)
     section3.blit(text, text_rect)
+
+    # 색상 변경 사각형 및 텍스트 생성
+    colors = ["RED", "YELLOW", "BLUE", "GREEN"]
+    color_values = [(255, 0, 0), (255, 255, 0), (0, 0, 255), (0, 255, 0)]
+    rects = []
+
+    for i in range(4):
+        rect_x = text_rect.right + 50 + i * 90
+        rect_y = text_rect.centery - 25
+        rect = pygame.Rect(rect_x, rect_y, 50, 50)
+        rects.append(rect)
+        pygame.draw.rect(section3, color_values[i], rect)
+        color_text = font.render(colors[i], True, BLACK)
+        color_text_rect = color_text.get_rect(center=rect.center)
+        section3.blit(color_text, color_text_rect)
+
+    pygame.display.update()
 
     ##섹션3 우측 중앙에 마지막 한장 남았을때 누르는 버튼 구현
     # UNO_bt = pygame.image.load('./이채은/image/UNO_bt.png')
@@ -298,6 +358,7 @@ def start_game():
         center=(pause_button_x + pause_button_width / 2, pause_button_y + pause_button_height / 2))
     section1.blit(text, text_rect)
 
+
     # 일시정지 및 종료 버튼 구현하고 "Pause" 텍스트 생성
     pause_button = pygame.Rect(10, 10, 30, 30)
     pygame.draw.rect(section1, LIGHT_YELLOW, pause_button)
@@ -324,11 +385,10 @@ def start_game():
             return True
         return False
 
-
-
-
-
     # 게임 시작할 때
+    # 유저 카드 그리기
+
+    selected_card = 0  # 선택된 카드의 인덱스
 
     user_card = []
     for item in players[0]:
@@ -337,36 +397,43 @@ def start_game():
     i = 0
     temp_list = []
     for item in user_card:
-        #item.update((50 + (screen_width / 10) * i, (screen_height * 0.35) / 2))
+        # item.update((50 + (screen_width / 10) * i, (screen_height * 0.35) / 2))
         item.update((50 + 50 * i, 500))
+        if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+            item.update((50 + 50 * i, 470))
         temp_list.append(item)
         i += 1
+
     user_group = pygame.sprite.RenderPlain(*temp_list)
     user_group.draw(screen)  # 그리기
 
-    #백 카드 스프라이트로 시도하기
+
+
+    # 백 카드 스프라이트로 시도하기
 
     backcard = Card('BACK', (screen_width, screen_height))
-    backcard.transform(160,150)
+    backcard.transform(160, 150)
     backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
     backcard = pygame.sprite.RenderPlain(backcard)
     backcard.draw(screen)
 
+    # 컴퓨터 카드 그리기
+    for j in range(1, numPlayers):
+        temp_list = []
+        i = 0
+        for item in players[j]:  # player_deck 해당 컴퓨터의 카드 리스트
+            cards = Card('BACK', (1200, 500))
+            cards.transform(30, 40)
+            cards.update((810 + 100 / len(players[1]) * i, 105 * j - 50))
+            temp_list.append(cards)
+            i += 1
+
+        player_group = pygame.sprite.RenderPlain(*temp_list)
+        player_group.draw(screen)
 
 
+    pygame.display.update()
 
-    #컴퓨터 카드 그리기
-    player_deck = []
-    temp_list = []
-    i = 0
-    for item in players[1]:  # player_deck 해당 컴퓨터의 카드 리스트
-        cards = Card('BACK', (1200, 500))
-        cards.transform(30, 40)
-        cards.update((810 + 100 / len(players[1]) * i, 50))
-        temp_list.append(cards)
-        i += 1
-    player_group = pygame.sprite.RenderPlain(*temp_list)
-    player_group.draw(screen)
 
     # top카드 이미지 변화
     back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
@@ -375,6 +442,8 @@ def start_game():
     y = int(screen_height * 0.4)
     screen.blit(back, (300, 110, 10, 10))
     # section1.blit(back, (300, 110, 10, 10))
+
+
     pygame.display.update()
 
     pygame.display.flip()
@@ -386,15 +455,13 @@ def start_game():
     # 게임 루프 실행
     while running:
 
-
-
         # 0번 플레이어로 하고 나머지 컴퓨터로 하기
 
         # 컴퓨터인 경우 먼저하기
         if playerTurn != 0:
             pygame.time.wait(700)
 
-            print("top ", discards[-1], "player turn",playerTurn+1)
+            print("top ", discards[-1], "player turn", playerTurn + 1)
 
             # 이함수 hand넘겨받는기능추가필요
             unoplayer = Computerplay.UnoPlayer(players[playerTurn])
@@ -406,6 +473,102 @@ def start_game():
                 # 1장 추가되는거 이미지로 구현
                 # 턴 변화
                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+
+                # 화면다시 그리기
+                screen.blit(section3, (0, section1_height))
+
+                # 플레이어 카드 변화
+                for i, item in enumerate(user_group):
+                    if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                        item.update((50 + 50 * i, 470))
+                    else:
+                        item.update((50 + 50 * i, 500))
+
+                user_group.draw(screen)
+                pygame.display.update()
+                '''
+                # playerTurn 화면표시
+
+                font = pygame.font.SysFont('comicsansms', 20)
+                if playerTurn == 0:
+                    text = font.render("Your turn", True, BLACK)
+                else:
+                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+                text_rect = text.get_rect(
+                    center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                section3.blit(text, text_rect)
+                '''
+                # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+                font = pygame.font.SysFont('comicsansms', 20)
+                if playerTurn == 0:
+                    text = font.render("Your turn", True, BLACK)
+                else:
+                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+                text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+                # Draw a rectangle with white color as background
+                background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10, text_rect.width + 20,
+                                              text_rect.height + 20)  # create a larger rect for the background
+                pygame.draw.rect(section3, WHITE, background_rect)  # draw the rect to the section3 surface
+
+                # Now draw the text
+                section3.blit(text, text_rect)
+
+                pygame.display.update()
+
+                screen.blit(section1, (0, 0))
+                # 백 카드 스프라이트로 시도하기
+
+                backcard = Card('BACK', (screen_width, screen_height))
+                backcard.transform(160, 150)
+                backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
+                backcard = pygame.sprite.RenderPlain(backcard)
+                backcard.draw(screen)
+
+                # top카드 이미지 변화
+                back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
+                back = pygame.transform.scale(back, (128, 162))
+                x = int(screen_width * 0.4)
+                y = int(screen_height * 0.4)
+                screen.blit(back, (300, 110, 10, 10))
+                # section1.blit(back, (300, 110, 10, 10))
+                pygame.display.update()
+
+                # 현재 색 표시 칸 구현
+                if curruntcolour == 'BLUE':
+                    pygame.draw.circle(section1, BLUE,
+                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                       int(section1_width * 0.05), 0)
+                elif curruntcolour == 'RED':
+                    pygame.draw.circle(section1, RED,
+                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                       int(section1_width * 0.05), 0)
+                elif curruntcolour == 'YELLOW':
+                    pygame.draw.circle(section1, LIGHT_YELLOW,
+                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                       int(section1_width * 0.05), 0)
+                elif curruntcolour == 'GREEN':
+                    pygame.draw.circle(section1, GREEN,
+                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                       int(section1_width * 0.05), 0)
+                # Inside your game loop where you want to draw the text
+                len(card)
+                font = pygame.font.Font(None, 24)
+                card_count_text = str(len(card))  # convert the card count to string
+                text_surface = font.render(card_count_text, True, BLACK)  # render the text
+                text_rect = text_surface.get_rect(
+                    center=(
+                        int(section1_width * 0.8), int(section1_height * 0.45)))  # get the rect for positioning
+                section1.blit(text_surface, text_rect)  # draw the text to the section1 surface
+                pygame.display.update()
+
+
+
+
+                pygame.display.update()
+
+
 
 
             else:
@@ -454,18 +617,20 @@ def start_game():
                         playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                         players[playerDraw].extend(drawCards(2))
 
-                        #플레이어면 유저그룹 변하게
+                        # 플레이어면 유저그룹 변하게
                         if playerDraw == 0:
                             # 화면다시 그리기
                             screen.blit(section3, (0, section1_height))
                             for i in range(2):
-                                tmp = Card(players[playerDraw][len(players[playerDraw])-2+i], (800, 600))
+                                tmp = Card(players[playerDraw][len(players[playerDraw]) - 2 + i], (800, 600))
                                 user_group.add(tmp)
-                                # 플레이어 카드 변화
-                            i = 0
-                            for item in user_group:
-                                item.update((50 + 50 * i, 500))
-                                i += 1
+                            # 플레이어 카드 변화
+                            for i, item in enumerate(user_group):
+                                if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                                    item.update((50 + 50 * i, 470))
+                                else:
+                                    item.update((50 + 50 * i, 500))
+
                             user_group.draw(screen)
                             pygame.display.update()
 
@@ -481,18 +646,100 @@ def start_game():
                             screen.blit(section3, (0, section1_height))
 
                             for i in range(4):
-                                tmp = Card(players[playerDraw][len(players[playerDraw])-4+i], (800, 600))
+                                tmp = Card(players[playerDraw][len(players[playerDraw]) - 4 + i], (800, 600))
                                 user_group.add(tmp)
                                 # 플레이어 카드 변화
-                            i = 0
-                            for item in user_group:
-                                item.update((50 + 50 * i, 500))
-                                i += 1
+                            # 플레이어 카드 변화
+                            for i, item in enumerate(user_group):
+                                if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                                    item.update((50 + 50 * i, 470))
+                                else:
+                                    item.update((50 + 50 * i, 500))
+
                             user_group.draw(screen)
                             pygame.display.update()
 
+
+                    # 컴퓨터 카드변화
+                    screen.blit(section2, (section1_width, 0))
+                    # 컴퓨터 카드 그리기
+                    for j in range(1, numPlayers):
+                        temp_list = []
+                        i = 0
+                        for item in players[j]:  # player_deck 해당 컴퓨터의 카드 리스트
+                            cards = Card('BACK', (1200, 500))
+                            cards.transform(30, 40)
+                            cards.update((810 + 100 / len(players[1]) * i, 105 * j - 50))
+                            temp_list.append(cards)
+                            i += 1
+
+                        player_group = pygame.sprite.RenderPlain(*temp_list)
+                        player_group.draw(screen)
+                    pygame.display.update()
+
                     # 턴 변화
                     playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+
+
+
+                    # 화면다시 그리기
+                    screen.blit(section3, (0, section1_height))
+
+                    # 플레이어 카드 변화
+                    for i, item in enumerate(user_group):
+                        if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                            item.update((50 + 50 * i, 470))
+                        else:
+                            item.update((50 + 50 * i, 500))
+
+                    user_group.draw(screen)
+                    pygame.display.update()
+                    '''
+                    # playerTurn 화면표시
+
+                    font = pygame.font.SysFont('comicsansms', 20)
+                    if playerTurn == 0:
+                        text = font.render("Your turn", True, BLACK)
+                    else:
+                        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+                    text_rect = text.get_rect(
+                        center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                    section3.blit(text, text_rect)
+                    '''
+                    # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+                    font = pygame.font.SysFont('comicsansms', 20)
+                    if playerTurn == 0:
+                        text = font.render("Your turn", True, BLACK)
+                    else:
+                        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+                    text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+                    # Draw a rectangle with white color as background
+                    background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10, text_rect.width + 20,
+                                                  text_rect.height + 20)  # create a larger rect for the background
+                    pygame.draw.rect(section3, WHITE, background_rect)  # draw the rect to the section3 surface
+
+                    # Now draw the text
+                    section3.blit(text, text_rect)
+
+                    pygame.display.update()
+
+
+
+
+                    pygame.display.update()
+
+                    screen.blit(section1, (0, 0))
+                    # 백 카드 스프라이트로 시도하기
+
+                    backcard = Card('BACK', (screen_width, screen_height))
+                    backcard.transform(160, 150)
+                    backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
+                    backcard = pygame.sprite.RenderPlain(backcard)
+                    backcard.draw(screen)
+
+
 
                     # top카드 이미지 변화
                     back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
@@ -503,17 +750,57 @@ def start_game():
                     # section1.blit(back, (300, 110, 10, 10))
                     pygame.display.update()
 
-            #여기 컴퓨터 카드변화 그리기
-            screen.blit(section2, (section1_width, 0))
-            player_group.remove()
-            for sprite in player_group:
-                player_group.remove(sprite)
-                break
+                    # 현재 색 표시 칸 구현
+                    if curruntcolour == 'BLUE':
+                        pygame.draw.circle(section1, BLUE,
+                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                           int(section1_width * 0.05), 0)
+                    elif curruntcolour == 'RED':
+                        pygame.draw.circle(section1, RED,
+                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                           int(section1_width * 0.05), 0)
+                    elif curruntcolour == 'YELLOW':
+                        pygame.draw.circle(section1, LIGHT_YELLOW,
+                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                           int(section1_width * 0.05), 0)
+                    elif curruntcolour == 'GREEN':
+                        pygame.draw.circle(section1, GREEN,
+                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                           int(section1_width * 0.05), 0)
+                    # Inside your game loop where you want to draw the text
+                    print(len(card))
+                    font = pygame.font.Font(None, 24)
+                    card_count_text = str(len(card))  # convert the card count to string
+                    text_surface = font.render(card_count_text, True, BLACK)  # render the text
+                    text_rect = text_surface.get_rect(
+                        center=(
+                        int(section1_width * 0.8), int(section1_height * 0.45)))  # get the rect for positioning
+                    section1.blit(text_surface, text_rect)  # draw the text to the section1 surface
+                    pygame.display.update()
 
-            for item in player_group:
-                item.update(((810 + 100 / len(player_group.sprites()) * i), 50))
-                i += 1
-            player_group.draw(screen)
+
+                    pygame.display.update()
+
+        # 타이머 설정
+        time_limit = datetime.timedelta(minutes=2)
+        start_time = datetime.datetime.now()
+        end_time = start_time + time_limit
+
+        # 타이머 업데이트
+
+        current_time = datetime.datetime.now()
+        time_left = end_time - current_time
+        if time_left.total_seconds() <= 0:
+            text = bold_font.render("Time's up!", True, (255, 0, 0))
+        else:
+            seconds_left = int(time_left.total_seconds())
+            text = font.render(str(seconds_left), True, (0, 0, 0))
+        text_rect = text.get_rect(center=(timer_x + timer_width / 2, timer_y + timer_height / 2))
+        section3.blit(text, text_rect)
+
+        pygame.display.update()
+
+
 
         # 사람인경우
         for event in pygame.event.get():
@@ -521,13 +808,221 @@ def start_game():
                 pygame.quit()
                 sys.exit()
 
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    return
+
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                elif event.key == pygame.K_LEFT:  # 왼쪽 화살표 키가 눌렸을 때
+                    selected_card = (selected_card - 1) % len(user_group)
+                    # 화면다시 그리기
+                    screen.blit(section3, (0, section1_height))
+                    # 플레이어 카드 변화
+                    for i, item in enumerate(user_group):
+                        if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                            item.update((50 + 50 * i, 470))
+                        else:
+                            item.update((50 + 50 * i, 500))
+
+                    user_group.draw(screen)
+                    pygame.display.update()
+
+
+                elif event.key == pygame.K_RIGHT:  # 오른쪽 화살표 키가 눌렸을 때
+                    selected_card = (selected_card + 1) % len(user_group)
+                    # 화면다시 그리기
+                    screen.blit(section3, (0, section1_height))
+
+
+                    # 플레이어 카드 변화
+                    for i, item in enumerate(user_group):
+                        if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                            item.update((50 + 50 * i, 470))
+                        else:
+                            item.update((50 + 50 * i, 500))
+
+                    user_group.draw(screen)
+                    pygame.display.update()
+
+
+                elif event.key == pygame.K_RETURN:  # enter 키가 눌렸을 때
+                    if playerTurn == 0:
+
+                        for i, sprite in enumerate(user_group):
+                            if i == selected_card:
+                                if check_card(curruntcolour, cardVal, sprite):
+                                    # 카드 낼때
+                                    discards.append(sprite.get_name())
+                                    user_group.remove(sprite)  # 핸드에서 내려는 카드를 제거하고
+                                    players[playerTurn].remove(sprite.get_name())
+
+                                    if len(players[playerTurn]) == 0:
+                                        print("finish")
+                                        running = False
+                                        winner = playerTurn + 1
+                                    # 버린카드 특별카드 체크
+                                    splitCard = discards[-1].split("_", 1)
+                                    curruntcolour = splitCard[0]
+
+                                    # 와일드면 카드값에 any부여
+                                    if curruntcolour == "BLACK":
+                                        cardVal = "Any"
+                                    else:
+                                        cardVal = splitCard[1]
+                                    # 와읻드면 색 선택하게
+                                    if curruntcolour == "BLACK":
+                                        unoplayer = Computerplay.UnoPlayer(players[playerTurn])
+                                        newColour = unoplayer.choose_color(players[playerTurn])
+                                        curruntcolour = newColour
+
+                                    # 리버스면 다음턴 회전반대로
+                                    if cardVal == "REVERSE":
+                                        playDirection = playDirection * (-1)
+                                        if len(players) == 2:
+                                            playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+
+                                    # 스킵하기
+                                    elif cardVal == "SKIP":
+                                        playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                                    # 2장 뽑기
+                                    elif splitCard[1] == "DRAW2":
+                                        playerDraw = next_draw(numPlayers, playDirection, playerTurn)
+                                        players[playerDraw].extend(drawCards(2))
+                                        # 컴퓨터 카드 변화구현
+                                    # 와일드 드로우 4
+                                    elif splitCard[1] == "DRAW4":
+                                        playerDraw = next_draw(numPlayers, playDirection, playerTurn)
+                                        players[playerDraw].extend(drawCards(4))
+                                        # 컴퓨터 카드 변화구현
+
+                                    # 턴 변화
+                                    playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+
+
+
+                                    screen.blit(section1, (0, 0))
+                                    # 백 카드 스프라이트로 시도하기
+
+                                    backcard = Card('BACK', (screen_width, screen_height))
+                                    backcard.transform(160, 150)
+                                    backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
+                                    backcard = pygame.sprite.RenderPlain(backcard)
+                                    backcard.draw(screen)
+
+                                    # top카드 이미지 변화
+                                    back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
+                                    back = pygame.transform.scale(back, (128, 162))
+                                    x = int(screen_width * 0.4)
+                                    y = int(screen_height * 0.4)
+                                    screen.blit(back, (300, 110, 10, 10))
+                                    # section1.blit(back, (300, 110, 10, 10))
+                                    pygame.display.update()
+
+                                    # 현재 색 표시 칸 구현
+                                    if curruntcolour == 'BLUE':
+                                        pygame.draw.circle(section1, BLUE,
+                                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                           int(section1_width * 0.05), 0)
+                                    elif curruntcolour == 'RED':
+                                        pygame.draw.circle(section1, RED,
+                                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                           int(section1_width * 0.05), 0)
+                                    elif curruntcolour == 'YELLOW':
+                                        pygame.draw.circle(section1, LIGHT_YELLOW,
+                                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                           int(section1_width * 0.05), 0)
+                                    elif curruntcolour == 'GREEN':
+                                        pygame.draw.circle(section1, GREEN,
+                                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                           int(section1_width * 0.05), 0)
+                                    # Inside your game loop where you want to draw the text
+                                    len(card)
+                                    font = pygame.font.Font(None, 24)
+                                    card_count_text = str(len(card))  # convert the card count to string
+                                    text_surface = font.render(card_count_text, True, BLACK)  # render the text
+                                    text_rect = text_surface.get_rect(
+                                        center=(int(section1_width * 0.8),
+                                                int(section1_height * 0.45)))  # get the rect for positioning
+                                    section1.blit(text_surface, text_rect)  # draw the text to the section1 surface
+                                    pygame.display.update()
+
+
+                                    pygame.display.update()
+
+
+
+                                    # 화면다시 그리기
+                                    screen.blit(section3, (0, section1_height))
+
+                                    # 플레이어 카드 변화
+                                    for i, item in enumerate(user_group):
+                                        if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                                            item.update((50 + 50 * i, 470))
+                                        else:
+                                            item.update((50 + 50 * i, 500))
+
+                                    user_group.draw(screen)
+                                    pygame.display.update()
+
+                                    break
+                                    '''
+
+                                    # playerTurn 화면표시
+                                    font = pygame.font.SysFont('comicsansms', 20)
+                                    if playerTurn == 0:
+                                        text = font.render("Your turn", True, BLACK)
+                                    else:
+                                        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+                                    text_rect = text.get_rect(
+                                        center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                                    section3.blit(text, text_rect)
+                                    '''
+                                    # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+                                    font = pygame.font.SysFont('comicsansms', 20)
+                                    if playerTurn == 0:
+                                        text = font.render("Your turn", True, BLACK)
+                                    else:
+                                        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+                                    text_rect = text.get_rect(
+                                        center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+                                    # Draw a rectangle with white color as background
+                                    background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10,
+                                                                  text_rect.width + 20,
+                                                                  text_rect.height + 20)  # create a larger rect for the background
+                                    pygame.draw.rect(section3, WHITE,
+                                                     background_rect)  # draw the rect to the section3 surface
+
+                                    # Now draw the text
+                                    section3.blit(text, text_rect)
+
+                                    pygame.display.update()
+
+
+                                    pygame.display.update()
+
+
+
+                                    # 컴퓨터 카드변화
+                                    screen.blit(section2, (section1_width, 0))
+                                    # 컴퓨터 카드 그리기
+                                    for j in range(1, numPlayers):
+                                        temp_list = []
+                                        i = 0
+                                        for item in players[j]:  # player_deck 해당 컴퓨터의 카드 리스트
+                                            cards = Card('BACK', (1200, 500))
+                                            cards.transform(30, 40)
+                                            cards.update((810 + 100 / len(players[1]) * i, 105 * j - 50))
+                                            temp_list.append(cards)
+                                            i += 1
+
+                                        player_group = pygame.sprite.RenderPlain(*temp_list)
+                                        player_group.draw(screen)
+                                    pygame.display.update()
+
+
+
             # "Pause" 버튼을 누르면 게임이 일시정지
             if event.type == pygame.MOUSEBUTTONDOWN:
                 '''
@@ -570,13 +1065,11 @@ def start_game():
                 if playerTurn == 0:
                     print("top ", discards[-1], "player turn", playerTurn + 1)
                     mouse_pos = pygame.mouse.get_pos()
-                    deck = loadcard.Card('BACK', (350,300))
-                    deck_group=pygame.sprite.RenderPlain(deck)
+                    deck = loadcard.Card('BACK', (350, 300))
+                    deck_group = pygame.sprite.RenderPlain(deck)
                     # 이건 덱에서 카드 뽑기
                     for sprite in backcard:
                         if sprite.get_rect().collidepoint(mouse_pos):
-
-
                             # 카드선택할 수 없으면
                             players[playerTurn].extend(drawCards(1))
 
@@ -585,31 +1078,53 @@ def start_game():
                             lastcard1 = len(user_group.sprites())
                             temp = Card(item, (800, 600))
                             user_group.add(temp)
-                            '''
-                            if lastcard1 > 8:
-                                x = 50 + screen_width / 10 * (lastcard1 - 8)
-                                y = screen_height * 0.35
-                            else:
-                                x = 50 + screen_width / 10 * lastcard1
-                                y = screen_height * 0.35 / 2
-                            temp.setposition(x, y)
-                            user_group.add(temp)
-                            pygame.display.update()  # 화면 업데이트
-                            '''
-
-                            #턴 변화
+                            # 턴 변화
                             playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
-                            #화면다시 그리기
-                            screen.blit(section3, (0, section1_height))
 
+                            # 화면다시 그리기
+                            screen.blit(section3, (0, section1_height))
                             # 플레이어 카드 변화
-                            i = 0
-                            for item in user_group:
-                                item.update((50 + 50 * i, 500))
-                                i += 1
+                            for i, item in enumerate(user_group):
+                                if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                                    item.update((50 + 50 * i, 470))
+                                else:
+                                    item.update((50 + 50 * i, 500))
                             user_group.draw(screen)
                             pygame.display.update()
+
+                            '''
+                            # playerTurn 화면표시
+
+                            font = pygame.font.SysFont('comicsansms', 20)
+                            if playerTurn == 0:
+                                text = font.render("Your turn", True, BLACK)
+                            else:
+                                text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+                            text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                            section3.blit(text, text_rect)
+
+                            pygame.display.update()
+                            '''
+                            # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+                            font = pygame.font.SysFont('comicsansms', 20)
+                            if playerTurn == 0:
+                                text = font.render("Your turn", True, BLACK)
+                            else:
+                                text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+                            text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+                            # Draw a rectangle with white color as background
+                            background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10, text_rect.width + 20,
+                                                          text_rect.height + 20)  # create a larger rect for the background
+                            pygame.draw.rect(section3, WHITE, background_rect)  # draw the rect to the section3 surface
+
+                            # Now draw the text
+                            section3.blit(text, text_rect)
+
+                            pygame.display.update()
+
 
                             break
 
@@ -617,56 +1132,17 @@ def start_game():
                     for sprite in user_group:
                         if sprite.get_rect().collidepoint(mouse_pos):
                             if check_card(curruntcolour, cardVal, sprite):
-
                                 # 카드 낼때
                                 discards.append(sprite.get_name())
                                 user_group.remove(sprite)  # 핸드에서 내려는 카드를 제거하고
                                 players[playerTurn].remove(sprite.get_name())
-
                                 if len(players[playerTurn]) == 0:
                                     print("finish")
                                     running = False
                                     winner = playerTurn + 1
-
-                                #
-                                # for temp in user_group: # 남아있는 카드들에 대해
-                                #     temp.move(sprite.getposition()) # 제거한 카드의 위치에 대해 빈자리를 채우게 카드 이동
-                                # sprite.setposition(430, 300)
-                                # pygame.display.update()  # 화면 업데이트
-
-                                # top카드 이미지 변화
-                                #print(sprite.get_name())
-                                #print(discards)
-
-                                '''
-                                #print(discards[-1],11,"그만 좀 허락해줘")
-                                top = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
-                                top = pygame.transform.scale(top,
-                                                              (int(section1_width * 0.20),
-                                                               int(section1_height * 0.45)))
-                                section1.blit(top, (300, 110, 10, 10))
-                                pygame.display.update()
-                                '''
-                                '''
-                                # 플레이어의 카드 변화
-                                item = players[playerTurn][-1]
-                                lastcard1 = len(user_group)
-                                temp = Card(item, (120, 110))
-                                if lastcard1 > 8:
-                                    x = 50 + screen_width / 10 * (lastcard1 - 8)
-                                    y = screen_height * 0.35
-                                else:
-                                    x = 50 + screen_width / 10 * lastcard1
-                                    y = screen_height * 0.35 / 2
-                                temp.setposition(x, y)
-                                user_group.add(temp)
-                                pygame.display.update()  # 화면 업데이트
-                                '''
-
                                 # 버린카드 특별카드 체크
                                 splitCard = discards[-1].split("_", 1)
                                 curruntcolour = splitCard[0]
-
                                 # 와일드면 카드값에 any부여
                                 if curruntcolour == "BLACK":
                                     cardVal = "Any"
@@ -678,10 +1154,6 @@ def start_game():
                                     newColour = unoplayer.choose_color(players[playerTurn])
                                     curruntcolour = newColour
 
-                                    '''
-                                    newColour = Computerplay.UnoPlayer.choose_color(players[playerTurn])
-                                    curruntcolour = colours[newColour - 1]
-                                    '''
                                 # 리버스면 다음턴 회전반대로
                                 if cardVal == "REVERSE":
                                     playDirection = playDirection * (-1)
@@ -695,14 +1167,28 @@ def start_game():
                                 elif splitCard[1] == "DRAW2":
                                     playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                                     players[playerDraw].extend(drawCards(2))
+                                    # 컴퓨터 카드 변화구현
                                 # 와일드 드로우 4
                                 elif splitCard[1] == "DRAW4":
                                     playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                                     players[playerDraw].extend(drawCards(4))
+                                    # 컴퓨터 카드 변화구현
 
                                 # 턴 변화
                                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
+
+
+
+
+                                screen.blit(section1, (0, 0))
+                                # 백 카드 스프라이트로 시도하기
+
+                                backcard = Card('BACK', (screen_width, screen_height))
+                                backcard.transform(160, 150)
+                                backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
+                                backcard = pygame.sprite.RenderPlain(backcard)
+                                backcard.draw(screen)
 
                                 # top카드 이미지 변화
                                 back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
@@ -713,17 +1199,104 @@ def start_game():
                                 # section1.blit(back, (300, 110, 10, 10))
                                 pygame.display.update()
 
+                                # 현재 색 표시 칸 구현
+                                if curruntcolour == 'BLUE':
+                                    pygame.draw.circle(section1, BLUE,
+                                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                       int(section1_width * 0.05), 0)
+                                elif curruntcolour == 'RED':
+                                    pygame.draw.circle(section1, RED,
+                                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                       int(section1_width * 0.05), 0)
+                                elif curruntcolour == 'YELLOW':
+                                    pygame.draw.circle(section1, LIGHT_YELLOW,
+                                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                       int(section1_width * 0.05), 0)
+                                elif curruntcolour == 'GREEN':
+                                    pygame.draw.circle(section1, GREEN,
+                                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                       int(section1_width * 0.05), 0)
+                                # Inside your game loop where you want to draw the text
+                                len(card)
+                                font = pygame.font.Font(None, 24)
+                                card_count_text = str(len(card))  # convert the card count to string
+                                text_surface = font.render(card_count_text, True, BLACK)  # render the text
+                                text_rect = text_surface.get_rect(
+                                    center=(int(section1_width * 0.8),
+                                            int(section1_height * 0.45)))  # get the rect for positioning
+                                section1.blit(text_surface, text_rect)  # draw the text to the section1 surface
+                                pygame.display.update()
+
+                                pygame.display.update()
+
                                 # 화면다시 그리기
                                 screen.blit(section3, (0, section1_height))
 
-                                #플레이어 카드 변화
-                                i = 0
-                                for item in user_group:
-                                    item.update((50 + 50 * i, 500))
-                                    i += 1
+                                # 플레이어 카드 변화
+                                for i, item in enumerate(user_group):
+                                    if i == selected_card:  # 선택된 카드에 대한 시각적 표시 (예: 선택된 카드를 약간 위로 올림)
+                                        item.update((50 + 50 * i, 470))
+                                    else:
+                                        item.update((50 + 50 * i, 500))
+
                                 user_group.draw(screen)
                                 pygame.display.update()
+                                '''
+
+                                # playerTurn 화면표시
+
+                                font = pygame.font.SysFont('comicsansms', 20)
+                                if playerTurn == 0:
+                                    text = font.render("Your turn", True, BLACK)
+                                else:
+                                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+                                text_rect = text.get_rect(
+                                    center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                                section3.blit(text, text_rect)
+                                '''
+                                # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+                                font = pygame.font.SysFont('comicsansms', 20)
+                                if playerTurn == 0:
+                                    text = font.render("Your turn", True, BLACK)
+                                else:
+                                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+                                text_rect = text.get_rect(
+                                    center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+                                # Draw a rectangle with white color as background
+                                background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10,
+                                                              text_rect.width + 20,
+                                                              text_rect.height + 20)  # create a larger rect for the background
+                                pygame.draw.rect(section3, WHITE,
+                                                 background_rect)  # draw the rect to the section3 surface
+
+                                # Now draw the text
+                                section3.blit(text, text_rect)
+
+                                pygame.display.update()
+
+
+
+                                pygame.display.update()
                                 break
+
+                                # 컴퓨터 카드변화
+                                screen.blit(section2, (section1_width, 0))
+                                # 컴퓨터 카드 그리기
+                                for j in range(1, numPlayers):
+                                    temp_list = []
+                                    i = 0
+                                    for item in players[j]:  # player_deck 해당 컴퓨터의 카드 리스트
+                                        cards = Card('BACK', (1200, 500))
+                                        cards.transform(30, 40)
+                                        cards.update((810 + 100 / len(players[1]) * i, 105 * j - 50))
+                                        temp_list.append(cards)
+                                        i += 1
+
+                                    player_group = pygame.sprite.RenderPlain(*temp_list)
+                                    player_group.draw(screen)
+                                pygame.display.update()
 
     # 점수계산
     # 일반카드 숫자대로 / 와일드와 와일드 드로우4 50점/ 500점 나오면 전체 승리
@@ -744,8 +1317,7 @@ def start_game():
     # 토탈 점수 계산해 500이상이면 완전끝
     playerscore[playerTurn - 1] += score
     if playerscore[playerTurn - 1] >= 500:
-        running= False
-
+        running = False
 
 
 
