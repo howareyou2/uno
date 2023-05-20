@@ -7,6 +7,7 @@ from loadcard import Card
 import Computerplay
 from config import Configset
 import pause
+import datetime
 
 pygame.init()
 
@@ -19,6 +20,18 @@ def change_turn(playDirection, numPlayers, playerTurn):
     elif playerTurn < 0:
         playerTurn = numPlayers - 1
     return playerTurn
+
+# 텍스트 생성 함수
+def render_timer():
+    current_time = datetime.datetime.now()
+    time_left = end_time - current_time
+    if time_left.total_seconds() <= 0:
+        text = bold_font.render("Time's up!", True, (255, 0, 0))
+    else:
+        seconds_left = int(time_left.total_seconds())
+        text = font.render(str(seconds_left), True, (0, 0, 0))
+    text_rect = text.get_rect(center=(timer_x + timer_width / 2, timer_y + timer_height / 2))
+    section3.blit(text, text_rect)
 
 
 def next_draw(numPlayers, playDirection, playerTurn):
@@ -138,6 +151,7 @@ def start_game():
     LIGHT_PINK = (255, 182, 193)
     GRAY = (128, 128, 128)
     RED = (255, 0, 0)
+    GREEN = (0, 255, 0)  # 녹색 추가
     LIGHT_YELLOW = (255, 255, 153)
 
     # 섹션1 크기, 테두리 설정, 배경사진'background.png'
@@ -149,12 +163,46 @@ def start_game():
     background = pygame.transform.scale(background, (section1_width, section1_height))
     section1.blit(background, (0, 0, 10, 10))
     pygame.draw.rect(section1, LIGHT_YELLOW, (0, 0, section1_width, section1_height), 3)
-
+    '''
     # 현재 색 표시 칸 구현
+
     pygame.draw.circle(section1, WHITE, (int(section1_width * 0.8), int(section1_height * 0.45)),
                        int(section1_width * 0.05), 0)
     pygame.draw.circle(section1, LIGHT_YELLOW, (int(section1_width * 0.8), int(section1_height * 0.45)),
                        int(section1_width * 0.05), 3)
+    pygame.draw.circle(section1, GREEN, (int(section1_width * 0.8), int(section1_height * 0.45)),
+                       int(section1_width * 0.05), 0)
+    '''
+    # 현재 색 표시 칸 구현
+    if curruntcolour == 'BLUE':
+
+        pygame.draw.circle(section1, BLUE,
+                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                           int(section1_width * 0.05), 0)
+        print(curruntcolour)
+    elif curruntcolour == 'RED':
+        print(2)
+        pygame.draw.circle(section1, RED,
+                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                           int(section1_width * 0.05), 0)
+        print(curruntcolour)
+    elif curruntcolour == 'YELLOW':
+        print(3)
+        pygame.draw.circle(section1, LIGHT_YELLOW,
+                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                           int(section1_width * 0.05), 0)
+        print(curruntcolour)
+    elif curruntcolour == 'GREEN':
+        print(4)
+        pygame.draw.circle(section1, GREEN,
+                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                           int(section1_width * 0.05), 0)
+    pygame.display.update()
+
+
+
+
+
 
     # 색 표시 기능 구현
 
@@ -201,6 +249,8 @@ def start_game():
     section2.blit(text, (p5_rect.x + 10, p5_rect.y + 10, 10, 10))
     text = font.render('Player6', True, BLACK)
     section2.blit(text, (p6_rect.x + 10, p6_rect.y + 10, 10, 10))
+
+
 
     # 섹션3 크기, 배경색, 테두리 설정
     section3_width = section1_width
@@ -267,6 +317,7 @@ def start_game():
         center=(pause_button_x + pause_button_width / 2, pause_button_y + pause_button_height / 2))
     section1.blit(text, text_rect)
 
+
     # 일시정지 및 종료 버튼 구현하고 "Pause" 텍스트 생성
     pause_button = pygame.Rect(10, 10, 30, 30)
     pygame.draw.rect(section1, LIGHT_YELLOW, pause_button)
@@ -315,6 +366,8 @@ def start_game():
     user_group = pygame.sprite.RenderPlain(*temp_list)
     user_group.draw(screen)  # 그리기
 
+
+
     # 백 카드 스프라이트로 시도하기
 
     backcard = Card('BACK', (screen_width, screen_height))
@@ -338,6 +391,9 @@ def start_game():
         player_group.draw(screen)
 
 
+    pygame.display.update()
+
+
     # top카드 이미지 변화
     back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
     back = pygame.transform.scale(back, (128, 162))
@@ -345,6 +401,8 @@ def start_game():
     y = int(screen_height * 0.4)
     screen.blit(back, (300, 110, 10, 10))
     # section1.blit(back, (300, 110, 10, 10))
+
+
     pygame.display.update()
 
     pygame.display.flip()
@@ -386,9 +444,10 @@ def start_game():
                         item.update((50 + 50 * i, 500))
 
                 user_group.draw(screen)
+                pygame.display.update()
 
                 # playerTurn 화면표시
-                '''
+
                 font = pygame.font.SysFont('comicsansms', 20)
                 if playerTurn == 0:
                     text = font.render("Your turn", True, BLACK)
@@ -397,7 +456,8 @@ def start_game():
                 text_rect = text.get_rect(
                     center=(int(section3_width * 0.1), int(section3_height * 0.1)))
                 section3.blit(text, text_rect)
-                '''
+
+
 
 
                 pygame.display.update()
@@ -514,6 +574,8 @@ def start_game():
                     # 턴 변화
                     playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
+
+
                     # 화면다시 그리기
                     screen.blit(section3, (0, section1_height))
 
@@ -525,9 +587,10 @@ def start_game():
                             item.update((50 + 50 * i, 500))
 
                     user_group.draw(screen)
+                    pygame.display.update()
 
                     # playerTurn 화면표시
-                    '''
+
                     font = pygame.font.SysFont('comicsansms', 20)
                     if playerTurn == 0:
                         text = font.render("Your turn", True, BLACK)
@@ -536,10 +599,20 @@ def start_game():
                     text_rect = text.get_rect(
                         center=(int(section3_width * 0.1), int(section3_height * 0.1)))
                     section3.blit(text, text_rect)
-                    '''
+
+
 
 
                     pygame.display.update()
+
+                    screen.blit(section1, (0, 0))
+                    # 백 카드 스프라이트로 시도하기
+
+                    backcard = Card('BACK', (screen_width, screen_height))
+                    backcard.transform(160, 150)
+                    backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
+                    backcard = pygame.sprite.RenderPlain(backcard)
+                    backcard.draw(screen)
 
 
 
@@ -551,6 +624,55 @@ def start_game():
                     screen.blit(back, (300, 110, 10, 10))
                     # section1.blit(back, (300, 110, 10, 10))
                     pygame.display.update()
+
+                    # 현재 색 표시 칸 구현
+                    if curruntcolour == 'BLUE':
+
+                        pygame.draw.circle(section1, BLUE,
+                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                           int(section1_width * 0.05), 0)
+                        print(curruntcolour)
+                    elif curruntcolour == 'RED':
+                        print(2)
+                        pygame.draw.circle(section1, RED,
+                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                           int(section1_width * 0.05), 0)
+                        print(curruntcolour)
+                    elif curruntcolour == 'YELLOW':
+                        print(3)
+                        pygame.draw.circle(section1, LIGHT_YELLOW,
+                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                           int(section1_width * 0.05), 0)
+                        print(curruntcolour)
+                    elif curruntcolour == 'GREEN':
+                        print(4)
+                        pygame.draw.circle(section1, GREEN,
+                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                           int(section1_width * 0.05), 0)
+                        print(curruntcolour)
+
+                    pygame.display.update()
+
+        # 타이머 설정
+        time_limit = datetime.timedelta(minutes=2)
+        start_time = datetime.datetime.now()
+        end_time = start_time + time_limit
+
+        # 타이머 업데이트
+
+        current_time = datetime.datetime.now()
+        time_left = end_time - current_time
+        if time_left.total_seconds() <= 0:
+            text = bold_font.render("Time's up!", True, (255, 0, 0))
+        else:
+            seconds_left = int(time_left.total_seconds())
+            text = font.render(str(seconds_left), True, (0, 0, 0))
+        text_rect = text.get_rect(center=(timer_x + timer_width / 2, timer_y + timer_height / 2))
+        section3.blit(text, text_rect)
+
+        pygame.display.update()
+
+
 
         # 사람인경우
         for event in pygame.event.get():
@@ -650,6 +772,15 @@ def start_game():
 
 
 
+                                    screen.blit(section1, (0, 0))
+                                    # 백 카드 스프라이트로 시도하기
+
+                                    backcard = Card('BACK', (screen_width, screen_height))
+                                    backcard.transform(160, 150)
+                                    backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
+                                    backcard = pygame.sprite.RenderPlain(backcard)
+                                    backcard.draw(screen)
+
                                     # top카드 이미지 변화
                                     back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
                                     back = pygame.transform.scale(back, (128, 162))
@@ -658,6 +789,36 @@ def start_game():
                                     screen.blit(back, (300, 110, 10, 10))
                                     # section1.blit(back, (300, 110, 10, 10))
                                     pygame.display.update()
+
+                                    # 현재 색 표시 칸 구현
+                                    if curruntcolour == 'BLUE':
+
+                                        pygame.draw.circle(section1, BLUE,
+                                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                           int(section1_width * 0.05), 0)
+                                        print(curruntcolour)
+                                    elif curruntcolour == 'RED':
+                                        print(2)
+                                        pygame.draw.circle(section1, RED,
+                                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                           int(section1_width * 0.05), 0)
+                                        print(curruntcolour)
+                                    elif curruntcolour == 'YELLOW':
+                                        print(3)
+                                        pygame.draw.circle(section1, LIGHT_YELLOW,
+                                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                           int(section1_width * 0.05), 0)
+                                        print(curruntcolour)
+                                    elif curruntcolour == 'GREEN':
+                                        print(4)
+                                        pygame.draw.circle(section1, GREEN,
+                                                           (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                           int(section1_width * 0.05), 0)
+                                        print(curruntcolour)
+
+                                    pygame.display.update()
+
+
 
                                     # 화면다시 그리기
                                     screen.blit(section3, (0, section1_height))
@@ -673,7 +834,7 @@ def start_game():
                                     pygame.display.update()
 
                                     break
-                                    '''
+
                                     # playerTurn 화면표시
                                     font = pygame.font.SysFont('comicsansms', 20)
                                     if playerTurn == 0:
@@ -684,8 +845,9 @@ def start_game():
                                         center=(int(section3_width * 0.1), int(section3_height * 0.1)))
                                     section3.blit(text, text_rect)
 
+
                                     pygame.display.update()
-                                    '''
+
 
 
                                     # 컴퓨터 카드변화
@@ -775,10 +937,11 @@ def start_game():
                                 else:
                                     item.update((50 + 50 * i, 500))
                             user_group.draw(screen)
+                            pygame.display.update()
 
 
                             # playerTurn 화면표시
-                            '''
+
                             font = pygame.font.SysFont('comicsansms', 20)
                             if playerTurn == 0:
                                 text = font.render("Your turn", True, BLACK)
@@ -786,7 +949,7 @@ def start_game():
                                 text = font.render("{}'s turn".format(playerTurn), True, BLACK)
                             text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
                             section3.blit(text, text_rect)
-                            '''
+
                             pygame.display.update()
 
 
@@ -841,6 +1004,19 @@ def start_game():
                                 # 턴 변화
                                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
+
+
+
+
+                                screen.blit(section1, (0, 0))
+                                # 백 카드 스프라이트로 시도하기
+
+                                backcard = Card('BACK', (screen_width, screen_height))
+                                backcard.transform(160, 150)
+                                backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
+                                backcard = pygame.sprite.RenderPlain(backcard)
+                                backcard.draw(screen)
+
                                 # top카드 이미지 변화
                                 back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
                                 back = pygame.transform.scale(back, (128, 162))
@@ -848,6 +1024,34 @@ def start_game():
                                 y = int(screen_height * 0.4)
                                 screen.blit(back, (300, 110, 10, 10))
                                 # section1.blit(back, (300, 110, 10, 10))
+                                pygame.display.update()
+
+                                # 현재 색 표시 칸 구현
+                                if curruntcolour == 'BLUE':
+
+                                    pygame.draw.circle(section1, BLUE,
+                                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                       int(section1_width * 0.05), 0)
+                                    print(curruntcolour)
+                                elif curruntcolour == 'RED':
+                                    print(2)
+                                    pygame.draw.circle(section1, RED,
+                                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                       int(section1_width * 0.05), 0)
+                                    print(curruntcolour)
+                                elif curruntcolour == 'YELLOW':
+                                    print(3)
+                                    pygame.draw.circle(section1, LIGHT_YELLOW,
+                                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                       int(section1_width * 0.05), 0)
+                                    print(curruntcolour)
+                                elif curruntcolour == 'GREEN':
+                                    print(4)
+                                    pygame.draw.circle(section1, GREEN,
+                                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                                       int(section1_width * 0.05), 0)
+                                    print(curruntcolour)
+
                                 pygame.display.update()
 
                                 # 화면다시 그리기
@@ -861,9 +1065,10 @@ def start_game():
                                         item.update((50 + 50 * i, 500))
 
                                 user_group.draw(screen)
+                                pygame.display.update()
 
                                 # playerTurn 화면표시
-                                '''
+
                                 font = pygame.font.SysFont('comicsansms', 20)
                                 if playerTurn == 0:
                                     text = font.render("Your turn", True, BLACK)
@@ -872,7 +1077,8 @@ def start_game():
                                 text_rect = text.get_rect(
                                     center=(int(section3_width * 0.1), int(section3_height * 0.1)))
                                 section3.blit(text, text_rect)
-                                '''
+
+
 
                                 pygame.display.update()
                                 break
