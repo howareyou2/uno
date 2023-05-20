@@ -6,13 +6,7 @@ import modeChoosepage
 import keySetting7
 import json
 
-custom_keys = {
-    'return': pygame.K_RETURN,
-    'up': pygame.K_UP,
-    'down': pygame.K_DOWN,
-    'left': pygame.K_LEFT,
-    'right': pygame.K_RIGHT
-}
+# custom_keys = {}
 
 def load_custom_keys():
     global custom_keys
@@ -74,6 +68,7 @@ selected_item = 0
 running = True
 while running:
     # Handle events
+    load_custom_keys()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
