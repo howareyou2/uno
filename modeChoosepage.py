@@ -2,6 +2,7 @@ import pygame
 pygame.init()
 import singlegame
 import storymode1
+import json
 
 # Set up the window
 WIN_WIDTH = 800
@@ -12,6 +13,10 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GRAY = (200, 200, 200)
 
+def load_custom_keys():
+    global custom_keys
+    with open('keySetting.json', 'r') as f:
+        custom_keys = json.load(f)
 
 def modeChoose():
     # 게임화면의 크기 설정
@@ -69,6 +74,7 @@ def modeChoose():
     running = True
     while running:
         # Handle events
+        load_custom_keys()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -77,11 +83,11 @@ def modeChoose():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                elif event.key == pygame.K_UP:
+                elif event.key == custom_keys['up']:
                     selected_item = (selected_item - 1) % len(mode_items)
-                elif event.key == pygame.K_DOWN:
+                elif event.key == custom_keys['down']:
                     selected_item = (selected_item + 1) % len(mode_items)
-                elif event.key == pygame.K_RETURN:
+                elif event.key == custom_keys['return']:
                     if selected_item == 0:
                         singlegame.start_game()
                     elif selected_item == 1:
