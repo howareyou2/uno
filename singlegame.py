@@ -11,6 +11,34 @@ import datetime
 
 pygame.init()
 
+def show_color_popup(screen, width, height, font, colors, color_values):
+    rects = []
+
+    popup_x = (screen.get_width() - width) // 2
+    popup_y = (screen.get_height() - height) // 2
+
+    for i in range(4):
+        rect_x = popup_x + 20 + i * 120
+        rect_y = popup_y + 25
+        rect = pygame.Rect(rect_x, rect_y, 50, 50)
+        rects.append(rect)
+        pygame.draw.rect(screen, color_values[i], rect)
+        color_text = font.render(colors[i], True, (0, 0, 0))
+        color_text_rect = color_text.get_rect(center=rect.center)
+        screen.blit(color_text, color_text_rect)
+
+    pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                for i, rect in enumerate(rects):
+                    if rect.collidepoint(mouse_pos):
+                        return colors[i]
 
 def change_turn(playDirection, numPlayers, playerTurn):
     # 턴 이동
@@ -317,6 +345,7 @@ def start_game():
     colors = ["RED", "YELLOW", "BLUE", "GREEN"]
     color_values = [(255, 0, 0), (255, 255, 0), (0, 0, 255), (0, 255, 0)]
     rects = []
+    '''
 
     for i in range(4):
         rect_x = text_rect.right + 50 + i * 90
@@ -329,6 +358,7 @@ def start_game():
         section3.blit(color_text, color_text_rect)
 
     pygame.display.update()
+    '''
 
     ##섹션3 우측 중앙에 마지막 한장 남았을때 누르는 버튼 구현
     # UNO_bt = pygame.image.load('./이채은/image/UNO_bt.png')
@@ -486,18 +516,7 @@ def start_game():
 
                 user_group.draw(screen)
                 pygame.display.update()
-                '''
-                # playerTurn 화면표시
 
-                font = pygame.font.SysFont('comicsansms', 20)
-                if playerTurn == 0:
-                    text = font.render("Your turn", True, BLACK)
-                else:
-                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
-                text_rect = text.get_rect(
-                    center=(int(section3_width * 0.1), int(section3_height * 0.1)))
-                section3.blit(text, text_rect)
-                '''
                 # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
                 font = pygame.font.SysFont('comicsansms', 20)
                 if playerTurn == 0:
@@ -871,9 +890,7 @@ def start_game():
                                         cardVal = splitCard[1]
                                     # 와읻드면 색 선택하게
                                     if curruntcolour == "BLACK":
-                                        unoplayer = Computerplay.UnoPlayer(players[playerTurn])
-                                        newColour = unoplayer.choose_color(players[playerTurn])
-                                        curruntcolour = newColour
+                                        curruntcolour = show_color_popup(screen, 500, 100, font, colors, color_values)
 
                                     # 리버스면 다음턴 회전반대로
                                     if cardVal == "REVERSE":
@@ -965,18 +982,7 @@ def start_game():
                                     pygame.display.update()
 
                                     break
-                                    '''
 
-                                    # playerTurn 화면표시
-                                    font = pygame.font.SysFont('comicsansms', 20)
-                                    if playerTurn == 0:
-                                        text = font.render("Your turn", True, BLACK)
-                                    else:
-                                        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
-                                    text_rect = text.get_rect(
-                                        center=(int(section3_width * 0.1), int(section3_height * 0.1)))
-                                    section3.blit(text, text_rect)
-                                    '''
                                     # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
                                     font = pygame.font.SysFont('comicsansms', 20)
                                     if playerTurn == 0:
@@ -1093,19 +1099,7 @@ def start_game():
                             user_group.draw(screen)
                             pygame.display.update()
 
-                            '''
-                            # playerTurn 화면표시
 
-                            font = pygame.font.SysFont('comicsansms', 20)
-                            if playerTurn == 0:
-                                text = font.render("Your turn", True, BLACK)
-                            else:
-                                text = font.render("{}'s turn".format(playerTurn), True, BLACK)
-                            text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
-                            section3.blit(text, text_rect)
-
-                            pygame.display.update()
-                            '''
                             # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
                             font = pygame.font.SysFont('comicsansms', 20)
                             if playerTurn == 0:
@@ -1150,9 +1144,8 @@ def start_game():
                                     cardVal = splitCard[1]
                                 # 와읻드면 색 선택하게
                                 if curruntcolour == "BLACK":
-                                    unoplayer = Computerplay.UnoPlayer(players[playerTurn])
-                                    newColour = unoplayer.choose_color(players[playerTurn])
-                                    curruntcolour = newColour
+
+                                    curruntcolour = show_color_popup(screen, 500, 100, font, colors, color_values)
 
                                 # 리버스면 다음턴 회전반대로
                                 if cardVal == "REVERSE":
@@ -1241,19 +1234,7 @@ def start_game():
 
                                 user_group.draw(screen)
                                 pygame.display.update()
-                                '''
 
-                                # playerTurn 화면표시
-
-                                font = pygame.font.SysFont('comicsansms', 20)
-                                if playerTurn == 0:
-                                    text = font.render("Your turn", True, BLACK)
-                                else:
-                                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
-                                text_rect = text.get_rect(
-                                    center=(int(section3_width * 0.1), int(section3_height * 0.1)))
-                                section3.blit(text, text_rect)
-                                '''
                                 # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
                                 font = pygame.font.SysFont('comicsansms', 20)
                                 if playerTurn == 0:
