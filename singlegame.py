@@ -313,6 +313,23 @@ def start_game():
     pygame.draw.rect(section3, RED, (text_rect.x - 5, text_rect.y - 5, text_rect.width + 10, text_rect.height + 10), 3)
     section3.blit(text, text_rect)
 
+    # 색상 변경 사각형 및 텍스트 생성
+    colors = ["RED", "YELLOW", "BLUE", "GREEN"]
+    color_values = [(255, 0, 0), (255, 255, 0), (0, 0, 255), (0, 255, 0)]
+    rects = []
+
+    for i in range(4):
+        rect_x = text_rect.right + 50 + i * 90
+        rect_y = text_rect.centery - 25
+        rect = pygame.Rect(rect_x, rect_y, 50, 50)
+        rects.append(rect)
+        pygame.draw.rect(section3, color_values[i], rect)
+        color_text = font.render(colors[i], True, BLACK)
+        color_text_rect = color_text.get_rect(center=rect.center)
+        section3.blit(color_text, color_text_rect)
+
+    pygame.display.update()
+
     ##섹션3 우측 중앙에 마지막 한장 남았을때 누르는 버튼 구현
     # UNO_bt = pygame.image.load('./이채은/image/UNO_bt.png')
     # UNO_bt = pygame.transform.scale(UNO_bt, (150,110))
@@ -1301,7 +1318,6 @@ def start_game():
     playerscore[playerTurn - 1] += score
     if playerscore[playerTurn - 1] >= 500:
         running = False
-
 
 
 
