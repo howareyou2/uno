@@ -275,6 +275,7 @@ def start_game():
     text_rect = text.get_rect(center=(timer_x + timer_width / 2, timer_y + timer_height / 2))
     section3.blit(text, text_rect)
 
+    '''
     # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
     font = pygame.font.SysFont('comicsansms', 20)
     if playerTurn == 0:
@@ -283,6 +284,26 @@ def start_game():
         text = font.render("{}'s turn".format(playerTurn), True, BLACK)
     text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
     section3.blit(text, text_rect)
+    '''
+
+    # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+    font = pygame.font.SysFont('comicsansms', 20)
+    if playerTurn == 0:
+        text = font.render("Your turn", True, BLACK)
+    else:
+        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+    text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+    # Draw a rectangle with white color as background
+    background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10, text_rect.width + 20,
+                                  text_rect.height + 20)  # create a larger rect for the background
+    pygame.draw.rect(section3, WHITE, background_rect)  # draw the rect to the section3 surface
+
+    # Now draw the text
+    section3.blit(text, text_rect)
+
+    pygame.display.update()
 
     # "UNO!" 텍스트 생성
     font = pygame.font.SysFont('comicsansms', 20)
@@ -448,7 +469,7 @@ def start_game():
 
                 user_group.draw(screen)
                 pygame.display.update()
-
+                '''
                 # playerTurn 화면표시
 
                 font = pygame.font.SysFont('comicsansms', 20)
@@ -459,6 +480,25 @@ def start_game():
                 text_rect = text.get_rect(
                     center=(int(section3_width * 0.1), int(section3_height * 0.1)))
                 section3.blit(text, text_rect)
+                '''
+                # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+                font = pygame.font.SysFont('comicsansms', 20)
+                if playerTurn == 0:
+                    text = font.render("Your turn", True, BLACK)
+                else:
+                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+                text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+                # Draw a rectangle with white color as background
+                background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10, text_rect.width + 20,
+                                              text_rect.height + 20)  # create a larger rect for the background
+                pygame.draw.rect(section3, WHITE, background_rect)  # draw the rect to the section3 surface
+
+                # Now draw the text
+                section3.blit(text, text_rect)
+
+                pygame.display.update()
 
                 screen.blit(section1, (0, 0))
                 # 백 카드 스프라이트로 시도하기
@@ -637,7 +677,7 @@ def start_game():
 
                     user_group.draw(screen)
                     pygame.display.update()
-
+                    '''
                     # playerTurn 화면표시
 
                     font = pygame.font.SysFont('comicsansms', 20)
@@ -648,6 +688,25 @@ def start_game():
                     text_rect = text.get_rect(
                         center=(int(section3_width * 0.1), int(section3_height * 0.1)))
                     section3.blit(text, text_rect)
+                    '''
+                    # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+                    font = pygame.font.SysFont('comicsansms', 20)
+                    if playerTurn == 0:
+                        text = font.render("Your turn", True, BLACK)
+                    else:
+                        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+                    text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+                    # Draw a rectangle with white color as background
+                    background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10, text_rect.width + 20,
+                                                  text_rect.height + 20)  # create a larger rect for the background
+                    pygame.draw.rect(section3, WHITE, background_rect)  # draw the rect to the section3 surface
+
+                    # Now draw the text
+                    section3.blit(text, text_rect)
+
+                    pygame.display.update()
 
 
 
@@ -889,6 +948,7 @@ def start_game():
                                     pygame.display.update()
 
                                     break
+                                    '''
 
                                     # playerTurn 화면표시
                                     font = pygame.font.SysFont('comicsansms', 20)
@@ -899,6 +959,28 @@ def start_game():
                                     text_rect = text.get_rect(
                                         center=(int(section3_width * 0.1), int(section3_height * 0.1)))
                                     section3.blit(text, text_rect)
+                                    '''
+                                    # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+                                    font = pygame.font.SysFont('comicsansms', 20)
+                                    if playerTurn == 0:
+                                        text = font.render("Your turn", True, BLACK)
+                                    else:
+                                        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+                                    text_rect = text.get_rect(
+                                        center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+                                    # Draw a rectangle with white color as background
+                                    background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10,
+                                                                  text_rect.width + 20,
+                                                                  text_rect.height + 20)  # create a larger rect for the background
+                                    pygame.draw.rect(section3, WHITE,
+                                                     background_rect)  # draw the rect to the section3 surface
+
+                                    # Now draw the text
+                                    section3.blit(text, text_rect)
+
+                                    pygame.display.update()
 
 
                                     pygame.display.update()
@@ -994,7 +1076,7 @@ def start_game():
                             user_group.draw(screen)
                             pygame.display.update()
 
-
+                            '''
                             # playerTurn 화면표시
 
                             font = pygame.font.SysFont('comicsansms', 20)
@@ -1003,6 +1085,25 @@ def start_game():
                             else:
                                 text = font.render("{}'s turn".format(playerTurn), True, BLACK)
                             text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+                            section3.blit(text, text_rect)
+
+                            pygame.display.update()
+                            '''
+                            # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+                            font = pygame.font.SysFont('comicsansms', 20)
+                            if playerTurn == 0:
+                                text = font.render("Your turn", True, BLACK)
+                            else:
+                                text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+                            text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+                            # Draw a rectangle with white color as background
+                            background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10, text_rect.width + 20,
+                                                          text_rect.height + 20)  # create a larger rect for the background
+                            pygame.draw.rect(section3, WHITE, background_rect)  # draw the rect to the section3 surface
+
+                            # Now draw the text
                             section3.blit(text, text_rect)
 
                             pygame.display.update()
@@ -1123,6 +1224,7 @@ def start_game():
 
                                 user_group.draw(screen)
                                 pygame.display.update()
+                                '''
 
                                 # playerTurn 화면표시
 
@@ -1134,6 +1236,28 @@ def start_game():
                                 text_rect = text.get_rect(
                                     center=(int(section3_width * 0.1), int(section3_height * 0.1)))
                                 section3.blit(text, text_rect)
+                                '''
+                                # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
+                                font = pygame.font.SysFont('comicsansms', 20)
+                                if playerTurn == 0:
+                                    text = font.render("Your turn", True, BLACK)
+                                else:
+                                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
+
+                                text_rect = text.get_rect(
+                                    center=(int(section3_width * 0.1), int(section3_height * 0.1)))
+
+                                # Draw a rectangle with white color as background
+                                background_rect = pygame.Rect(text_rect.left - 10, text_rect.top - 10,
+                                                              text_rect.width + 20,
+                                                              text_rect.height + 20)  # create a larger rect for the background
+                                pygame.draw.rect(section3, WHITE,
+                                                 background_rect)  # draw the rect to the section3 surface
+
+                                # Now draw the text
+                                section3.blit(text, text_rect)
+
+                                pygame.display.update()
 
 
 
