@@ -1,5 +1,7 @@
 import pygame
 import colorblind
+import keySetting
+import json
 
 # Define colors
 BLACK = (0, 0, 0)
@@ -10,6 +12,10 @@ GRAY = (200, 200, 200)
 WIN_WIDTH = 800
 WIN_HEIGHT = 600
 
+def load_custom_keys():
+    global custom_keys
+    with open('keySetting.json', 'r') as f:
+        custom_keys = json.load(f)
 
 # 버튼 액션 함수
 def change_screen_size(c):
@@ -33,7 +39,7 @@ def change_screen_size(c):
 
 def change_key_setting():
     # 키설정 변경 코드 작성
-    pass
+    keySetting.run()
 
 
 def toggle_color_blind_mode(t):
@@ -103,6 +109,7 @@ def settings_screen():
     # 게임 루프
     while running:
         # 이벤트 처리
+        load_custom_keys()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -111,11 +118,11 @@ def settings_screen():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                elif event.key == pygame.K_UP:
+                elif event.key == custom_keys['up']:
                     selected_item = (selected_item - 1) % len(menu_items)
-                elif event.key == pygame.K_DOWN:
+                elif event.key == custom_keys['down']:
                     selected_item = (selected_item + 1) % len(menu_items)
-                elif event.key == pygame.K_RETURN:
+                elif event.key == custom_keys['return']:
                     # 키보드로 박스 선택 , 위치순서대로
                     if selected_item == 0:
                         change_screen_size(cnt)
