@@ -3,7 +3,7 @@ import random
 class UNODeck:
     def __init__(self): 
         self.colors = ['RED', 'YELLOW', 'GREEN', 'BLUE']
-        self.values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'SKIP', 'REVERSE', 'DRAW2']
+        self.values = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'SKIP', 'REVERSE', 'DRAW2', 'CHANGE', 'AGAIN']
         self.special_cards = ['BLACK_CHANGE', 'BLACK_DRAW4']
         self.cards = []
         
@@ -22,10 +22,7 @@ class UNODeck:
         
     def deal(self, num_players, num_cards=7): # 카드 분배
         if num_players < 2 or num_players > 10:
-            raise ValueError("Number of players must be between 2 and 10.")
-        if num_cards < 1 or num_cards > 108 // num_players:
-            raise ValueError("Number of cards per player must be between 1 and {}.".format(108 // num_players))
-        
+            raise ValueError("Number of players must be between 2 and 10.")  
         hands = [[] for _ in range(num_players)]
         for _ in range(num_cards):
             for i in range(num_players):
@@ -36,16 +33,13 @@ class UNODeck:
     def getCards(self): # 분배하고 남은 카드
         return self.cards
 
-    def dealALL(self):
+    def dealALL(self): # 지역 B용 모든 카드 분배
         num_players=4
         hands = [[] for _ in range(num_players)]
-        j=0
-        for i in range(103):
-            hands[j].append(self.cards.pop(0))
-            if j==3:
-                j=0
-            else:
-                j+=1
+        num_cards=len(self.cards)/num_players
+        for _ in range(num_cards):
+            for i in range(num_players):
+                hands[i].append(self.cards.pop(0))
         return hands 
     
     def storyshuffle(self): # 지역 A용 hands[0]=user hands[1]=computer
