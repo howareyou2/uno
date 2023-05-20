@@ -98,6 +98,7 @@ def start_game():
 
     card = unodeck.getCards()
 
+
     # 이전 저장파일 불러오기
     cf = Configset()
     default = cf.getChange()
@@ -175,28 +176,30 @@ def start_game():
     '''
     # 현재 색 표시 칸 구현
     if curruntcolour == 'BLUE':
-
         pygame.draw.circle(section1, BLUE,
                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                            int(section1_width * 0.05), 0)
-        print(curruntcolour)
     elif curruntcolour == 'RED':
-        print(2)
         pygame.draw.circle(section1, RED,
                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                            int(section1_width * 0.05), 0)
-        print(curruntcolour)
     elif curruntcolour == 'YELLOW':
-        print(3)
         pygame.draw.circle(section1, LIGHT_YELLOW,
                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                            int(section1_width * 0.05), 0)
-        print(curruntcolour)
     elif curruntcolour == 'GREEN':
-        print(4)
         pygame.draw.circle(section1, GREEN,
                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                            int(section1_width * 0.05), 0)
+
+    # Inside your game loop where you want to draw the text
+    len(card)
+    font = pygame.font.Font(None, 24)
+    card_count_text = str(len(card))  # convert the card count to string
+    text_surface = font.render(card_count_text, True, BLACK)  # render the text
+    text_rect = text_surface.get_rect(
+        center=(int(section1_width * 0.8), int(section1_height * 0.45)))  # get the rect for positioning
+    section1.blit(text_surface, text_rect)  # draw the text to the section1 surface
     pygame.display.update()
 
 
@@ -457,6 +460,52 @@ def start_game():
                     center=(int(section3_width * 0.1), int(section3_height * 0.1)))
                 section3.blit(text, text_rect)
 
+                screen.blit(section1, (0, 0))
+                # 백 카드 스프라이트로 시도하기
+
+                backcard = Card('BACK', (screen_width, screen_height))
+                backcard.transform(160, 150)
+                backcard.update((int(section1_width * 0.20), int(section1_height * 0.45)))
+                backcard = pygame.sprite.RenderPlain(backcard)
+                backcard.draw(screen)
+
+                # top카드 이미지 변화
+                back = pygame.image.load('./최회민/img/{}.png'.format(discards[-1]))
+                back = pygame.transform.scale(back, (128, 162))
+                x = int(screen_width * 0.4)
+                y = int(screen_height * 0.4)
+                screen.blit(back, (300, 110, 10, 10))
+                # section1.blit(back, (300, 110, 10, 10))
+                pygame.display.update()
+
+                # 현재 색 표시 칸 구현
+                if curruntcolour == 'BLUE':
+                    pygame.draw.circle(section1, BLUE,
+                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                       int(section1_width * 0.05), 0)
+                elif curruntcolour == 'RED':
+                    pygame.draw.circle(section1, RED,
+                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                       int(section1_width * 0.05), 0)
+                elif curruntcolour == 'YELLOW':
+                    pygame.draw.circle(section1, LIGHT_YELLOW,
+                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                       int(section1_width * 0.05), 0)
+                elif curruntcolour == 'GREEN':
+                    pygame.draw.circle(section1, GREEN,
+                                       (int(section1_width * 0.8), int(section1_height * 0.45)),
+                                       int(section1_width * 0.05), 0)
+                # Inside your game loop where you want to draw the text
+                len(card)
+                font = pygame.font.Font(None, 24)
+                card_count_text = str(len(card))  # convert the card count to string
+                text_surface = font.render(card_count_text, True, BLACK)  # render the text
+                text_rect = text_surface.get_rect(
+                    center=(
+                        int(section1_width * 0.8), int(section1_height * 0.45)))  # get the rect for positioning
+                section1.blit(text_surface, text_rect)  # draw the text to the section1 surface
+                pygame.display.update()
+
 
 
 
@@ -627,29 +676,32 @@ def start_game():
 
                     # 현재 색 표시 칸 구현
                     if curruntcolour == 'BLUE':
-
                         pygame.draw.circle(section1, BLUE,
                                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                                            int(section1_width * 0.05), 0)
-                        print(curruntcolour)
                     elif curruntcolour == 'RED':
-                        print(2)
                         pygame.draw.circle(section1, RED,
                                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                                            int(section1_width * 0.05), 0)
-                        print(curruntcolour)
                     elif curruntcolour == 'YELLOW':
-                        print(3)
                         pygame.draw.circle(section1, LIGHT_YELLOW,
                                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                                            int(section1_width * 0.05), 0)
-                        print(curruntcolour)
                     elif curruntcolour == 'GREEN':
-                        print(4)
                         pygame.draw.circle(section1, GREEN,
                                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                                            int(section1_width * 0.05), 0)
-                        print(curruntcolour)
+                    # Inside your game loop where you want to draw the text
+                    print(len(card))
+                    font = pygame.font.Font(None, 24)
+                    card_count_text = str(len(card))  # convert the card count to string
+                    text_surface = font.render(card_count_text, True, BLACK)  # render the text
+                    text_rect = text_surface.get_rect(
+                        center=(
+                        int(section1_width * 0.8), int(section1_height * 0.45)))  # get the rect for positioning
+                    section1.blit(text_surface, text_rect)  # draw the text to the section1 surface
+                    pygame.display.update()
+
 
                     pygame.display.update()
 
@@ -792,29 +844,32 @@ def start_game():
 
                                     # 현재 색 표시 칸 구현
                                     if curruntcolour == 'BLUE':
-
                                         pygame.draw.circle(section1, BLUE,
                                                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                                                            int(section1_width * 0.05), 0)
-                                        print(curruntcolour)
                                     elif curruntcolour == 'RED':
-                                        print(2)
                                         pygame.draw.circle(section1, RED,
                                                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                                                            int(section1_width * 0.05), 0)
-                                        print(curruntcolour)
                                     elif curruntcolour == 'YELLOW':
-                                        print(3)
                                         pygame.draw.circle(section1, LIGHT_YELLOW,
                                                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                                                            int(section1_width * 0.05), 0)
-                                        print(curruntcolour)
                                     elif curruntcolour == 'GREEN':
-                                        print(4)
                                         pygame.draw.circle(section1, GREEN,
                                                            (int(section1_width * 0.8), int(section1_height * 0.45)),
                                                            int(section1_width * 0.05), 0)
-                                        print(curruntcolour)
+                                    # Inside your game loop where you want to draw the text
+                                    len(card)
+                                    font = pygame.font.Font(None, 24)
+                                    card_count_text = str(len(card))  # convert the card count to string
+                                    text_surface = font.render(card_count_text, True, BLACK)  # render the text
+                                    text_rect = text_surface.get_rect(
+                                        center=(int(section1_width * 0.8),
+                                                int(section1_height * 0.45)))  # get the rect for positioning
+                                    section1.blit(text_surface, text_rect)  # draw the text to the section1 surface
+                                    pygame.display.update()
+
 
                                     pygame.display.update()
 
@@ -1028,29 +1083,31 @@ def start_game():
 
                                 # 현재 색 표시 칸 구현
                                 if curruntcolour == 'BLUE':
-
                                     pygame.draw.circle(section1, BLUE,
                                                        (int(section1_width * 0.8), int(section1_height * 0.45)),
                                                        int(section1_width * 0.05), 0)
-                                    print(curruntcolour)
                                 elif curruntcolour == 'RED':
-                                    print(2)
                                     pygame.draw.circle(section1, RED,
                                                        (int(section1_width * 0.8), int(section1_height * 0.45)),
                                                        int(section1_width * 0.05), 0)
-                                    print(curruntcolour)
                                 elif curruntcolour == 'YELLOW':
-                                    print(3)
                                     pygame.draw.circle(section1, LIGHT_YELLOW,
                                                        (int(section1_width * 0.8), int(section1_height * 0.45)),
                                                        int(section1_width * 0.05), 0)
-                                    print(curruntcolour)
                                 elif curruntcolour == 'GREEN':
-                                    print(4)
                                     pygame.draw.circle(section1, GREEN,
                                                        (int(section1_width * 0.8), int(section1_height * 0.45)),
                                                        int(section1_width * 0.05), 0)
-                                    print(curruntcolour)
+                                # Inside your game loop where you want to draw the text
+                                len(card)
+                                font = pygame.font.Font(None, 24)
+                                card_count_text = str(len(card))  # convert the card count to string
+                                text_surface = font.render(card_count_text, True, BLACK)  # render the text
+                                text_rect = text_surface.get_rect(
+                                    center=(int(section1_width * 0.8),
+                                            int(section1_height * 0.45)))  # get the rect for positioning
+                                section1.blit(text_surface, text_rect)  # draw the text to the section1 surface
+                                pygame.display.update()
 
                                 pygame.display.update()
 
