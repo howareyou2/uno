@@ -54,13 +54,16 @@ def get_user_input():
     selected_key = None
 
     clock = pygame.time.Clock()
-    font = pygame.font.Font(None, 24)
+    font = pygame.font.SysFont('comicsansms', 24) 
     screen = pygame.display.set_mode((800, 600))
     screen_center = screen.get_rect().center
 
     while waiting:
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.QUIT:
+                #running = False
+                return
+            elif event.type == pygame.KEYDOWN:
                 if selected_key:
                     custom_keys[selected_key] = event.key
                     selected_key = None  # 선택된 키 초기화
@@ -73,29 +76,41 @@ def get_user_input():
                     elif pygame.key.name(event.key) in key_labels:
                         selected_key = pygame.key.name(event.key)
 
+            # 클릭 이벤트 처리
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # 마우스 왼쪽 버튼 클릭
+                    if back_button2.rect.collidepoint(event.pos):
+                        return
+
         screen.fill((255, 255, 255))  # 흰색 창
 
-        draw_text('Key Settings', font, (0, 0, 0), screen, screen_center[0] - 80, screen_center[1] - 220)
+        draw_text('Press the arrow keys and enter keys ', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 250)
+        draw_text('to change them to the desired key', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 220)
 
-        draw_text('Enter Key:', font, (0, 0, 0), screen, screen_center[0] - 160, screen_center[1] - 180)
-        draw_text(pygame.key.name(custom_keys['return']), font, (0, 0, 0), screen, screen_center[0] + 120, screen_center[1] - 180)
-        draw_text('Up Key:', font, (0, 0, 0), screen, screen_center[0] - 160, screen_center[1] - 150)
-        draw_text(pygame.key.name(custom_keys['up']), font, (0, 0, 0), screen, screen_center[0] + 120, screen_center[1] - 150)
-        draw_text('Down Key:', font, (0, 0, 0), screen, screen_center[0] - 160, screen_center[1] - 120)
-        draw_text(pygame.key.name(custom_keys['down']), font, (0, 0, 0), screen, screen_center[0] + 120, screen_center[1] - 120)
-        draw_text('Left Key:', font, (0, 0, 0), screen, screen_center[0] - 160, screen_center[1] - 90)
-        draw_text(pygame.key.name(custom_keys['left']), font, (0, 0, 0), screen, screen_center[0] + 120, screen_center[1] - 90)
-        draw_text('Right Key:', font, (0, 0, 0), screen, screen_center[0] - 160, screen_center[1] - 60)
-        draw_text(pygame.key.name(custom_keys['right']), font, (0, 0, 0), screen, screen_center[0] + 120, screen_center[1] - 60)
+        draw_text('Key Settings', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 80)
+
+        draw_text('Enter Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] - 50, align="top")
+        draw_text(pygame.key.name(custom_keys['return']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] - 50, align="top")
+        draw_text('Up Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] - 10, align="top")
+        draw_text(pygame.key.name(custom_keys['up']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] - 10, align="top")
+        draw_text('Down Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 30, align="top")
+        draw_text(pygame.key.name(custom_keys['down']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 30, align="top")
+        draw_text('Left Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 70, align="top")
+        draw_text(pygame.key.name(custom_keys['left']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 70, align="top")
+        draw_text('Right Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 110, align="top")
+        draw_text(pygame.key.name(custom_keys['right']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 110, align="top")
+
+        back_button2 = Button("Back", font, (200, 200, 200), (150, 150, 150),0,0,80,40)
 
         if selected_key:
             if selected_key != 'return':
-                draw_text('Press a new key for ' + selected_key + '...', font, (255, 0, 0), screen, screen_center[0] - 140, screen_center[1] + 60)
+                draw_text('Press a new key for ' + selected_key + '...', font, (255, 0, 0), screen, screen_center[0], screen_center[1] - 170)
             else:
-                draw_text('Press a new key for 엔터...', font, (255, 0, 0), screen, screen_center[0] - 140, screen_center[1] + 60)
+                draw_text('Press a new key for 엔터...', font, (255, 0, 0), screen, screen_center[0], screen_center[1] - 170)
         else:
-            draw_text('Press ESC to exit.', font, (0, 0, 0), screen, screen_center[0] - 100, screen_center[1] + 60)
+            draw_text('Press ESC or Click Back to exit.', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 170)
 
+        back_button2.draw(screen)
         pygame.display.update()
         clock.tick(60)
 
@@ -134,10 +149,15 @@ def reset_settings():
         'left': pygame.K_LEFT,
         'right': pygame.K_RIGHT
     }
+
+def back():
+    return
+
+
 def run():
-    #pygame.init()
+    pygame.init()
     clock = pygame.time.Clock()
-    font = pygame.font.Font(None, 24)
+    font = pygame.font.SysFont('comicsansms', 24)
     screen = pygame.display.set_mode((800, 600))
     screen_center = screen.get_rect().center
 
@@ -154,6 +174,8 @@ def run():
                     get_user_input()
                 elif event.key == pygame.K_r:
                     reset_settings()
+                elif event.key == pygame.K_ESCAPE:
+                    return
 
             # 클릭 이벤트 처리
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -162,32 +184,36 @@ def run():
                         save_button.click()
                     elif reset_button.rect.collidepoint(event.pos):
                         reset_button.click()
-
+                    elif back_button.rect.collidepoint(event.pos):
+                        return
 
         screen.fill((255, 255, 255))  # 흰색 창
 
-        draw_text('Press SPACE to change key settings', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 100)
-        draw_text('Press R to reset key settings', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 70)
+        draw_text('Press SPACE to change key settings', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 250)
+        draw_text('Click Save to save key settings', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 200)
+        draw_text('Press R or Click Reset to reset key settings', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 150)
 
-        draw_text('Key Settings', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 20)
+        draw_text('<Key Settings>', font, (0, 0, 0), screen, screen_center[0], screen_center[1] - 80)
 
-        draw_text('Enter Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 20, align="top")
-        draw_text(pygame.key.name(custom_keys['return']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 20, align="top")
-        draw_text('Up Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 50, align="top")
-        draw_text(pygame.key.name(custom_keys['up']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 50, align="top")
-        draw_text('Down Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 80, align="top")
-        draw_text(pygame.key.name(custom_keys['down']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 80, align="top")
-        draw_text('Left Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 110, align="top")
-        draw_text(pygame.key.name(custom_keys['left']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 110, align="top")
-        draw_text('Right Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 140, align="top")
-        draw_text(pygame.key.name(custom_keys['right']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 140, align="top")
+        draw_text('Enter Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] - 50, align="top")
+        draw_text(pygame.key.name(custom_keys['return']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] - 50, align="top")
+        draw_text('Up Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] - 10, align="top")
+        draw_text(pygame.key.name(custom_keys['up']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] - 10, align="top")
+        draw_text('Down Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 30, align="top")
+        draw_text(pygame.key.name(custom_keys['down']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 30, align="top")
+        draw_text('Left Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 70, align="top")
+        draw_text(pygame.key.name(custom_keys['left']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 70, align="top")
+        draw_text('Right Key:', font, (0, 0, 0), screen, screen_center[0] - 120, screen_center[1] + 110, align="top")
+        draw_text(pygame.key.name(custom_keys['right']), font, (0, 0, 0), screen, screen_center[0] + 70, screen_center[1] + 110, align="top")
 
         # 버튼 생성
         save_button = Button("Save", font, (200, 200, 200), (150, 150, 150), screen_center[0] - 120, screen_center[1] + 180, 80, 40, action=save_settings)
         reset_button = Button("Reset", font, (200, 200, 200), (150, 150, 150), screen_center[0] + 40, screen_center[1] + 180, 80, 40, action=reset_settings)
+        back_button = Button("Back", font, (200, 200, 200), (150, 150, 150),0,0,80,40)
 
         save_button.draw(screen)
         reset_button.draw(screen)
+        back_button.draw(screen)
 
         pygame.display.flip()
         clock.tick(60)
