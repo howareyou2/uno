@@ -4,6 +4,7 @@ import settings
 import singlegame
 import modeChoosepage
 import json
+import achievpage
 
 def load_custom_keys():
     global custom_keys
@@ -71,8 +72,7 @@ while running:
                 if selected_item == 0:
                     modeChoosepage.modeChoose()
                 elif selected_item == 1:
-                    print(1)
-                                  
+                    achievpage.achieve_screen()  
                 elif selected_item == 2:
                     settings.settings_screen()
                 elif selected_item == 3:
@@ -90,8 +90,7 @@ while running:
                         if selected_item == 0:
                             modeChoosepage.modeChoose()
                         elif selected_item == 1:
-                            print(1)
-                        
+                            achievpage.achieve_screen()  
                         elif selected_item == 2:
                             settings.settings_screen()
                         elif selected_item == 3:
