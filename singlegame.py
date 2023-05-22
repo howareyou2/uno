@@ -134,8 +134,8 @@ def start_game():
 
     # 플레이어 인원 입력받기
 
-    # 일단 7명으로 임의로 지정
-    numPlayers = 2
+    numPlayers = json.load(open('players.json'))['players']
+
 
     # 플레이어 점수
     playerscore = []
