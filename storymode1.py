@@ -171,6 +171,9 @@ def story_map1():
                     running = False
                     import storymodegame1
                     storymodegame1.start_game()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    running = False
+                    storymodegame1.start_game()
 
             pygame.display.update()
     pygame.display.update()

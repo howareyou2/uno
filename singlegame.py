@@ -6,11 +6,18 @@ import shuffle
 from loadcard import Card
 import Computerplay
 from config import Configset
+pygame.init()
 import pause
+import json
 import achievement
 import datetime
 
-pygame.init()
+#sound_settings.json 파일 불러와서 볼륨 설정하기
+with open('sound_settings.json', 'r') as file:
+    sound_settings = json.load(file)
+
+volum_1 = sound_settings['volume_1']
+
 
 def show_color_popup(screen, width, height, font, colors, color_values):
     rects = []
@@ -73,6 +80,16 @@ def next_draw(numPlayers, playDirection, playerTurn):
 
 
 def start_game():
+    
+    with open('sound_settings.json', 'r') as file:
+        sound_settings = json.load(file)
+
+    volum_1 = sound_settings['volume_1']
+
+    print(volum_1)
+
+    
+    
     # 카드뽑기 함수, top에서
     def drawCards(numCards):
         cardsDrawn = []
@@ -111,8 +128,8 @@ def start_game():
 
     # 플레이어 인원 입력받기
 
-    # 일단 7명으로 임의로 지정
-    numPlayers = 2
+    numPlayers = json.load(open('players.json'))['players']
+
 
     # 플레이어 점수
     playerscore = []
