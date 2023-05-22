@@ -3,6 +3,7 @@ pygame.init()
 import singlegame
 import storymode1
 import json
+import lobby
 
 # Set up the window
 WIN_WIDTH = 800
@@ -89,7 +90,7 @@ def modeChoose():
                     selected_item = (selected_item + 1) % len(mode_items)
                 elif event.key == custom_keys['return']:
                     if selected_item == 0:
-                        singlegame.start_game()
+                        lobby.lobby()
                     elif selected_item == 1:
                         storymode1.story_map1()
                     elif selected_item == 2:
@@ -106,7 +107,7 @@ def modeChoose():
                         if button_rect.collidepoint(event.pos):
                             selected_item = i
                             if selected_item == 0:
-                                singlegame.start_game()
+                                lobby.lobby()
                             elif selected_item == 1:
                                 storymode1.story_map1()
                             elif selected_item == 2:
