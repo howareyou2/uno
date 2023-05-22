@@ -9,6 +9,7 @@ from config import Configset
 import pause
 import achievement
 import datetime
+import json
 
 pygame.init()
 
