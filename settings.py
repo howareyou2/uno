@@ -27,9 +27,9 @@ def change_screen_size(c):
 
     # 화면 크기 변경 코드 작성
     # 0작은창 1중간창 2풀화면
-    if c == 0:
+    if cnt == 0:
         screen = pygame.display.set_mode(screen_size2)
-    elif c==1:
+    elif cnt==1:
         screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     else:
         screen = pygame.display.set_mode(screen_size1)
@@ -85,7 +85,7 @@ def settings_screen():
         {"text": "Key Setting", "pos": (WIN_WIDTH // 2, 260)},
         {"text": "Color Blind Mode", "pos": (WIN_WIDTH // 2,320)},
         {"text": "Reset Settings", "pos": (WIN_WIDTH // 2, 380)},
-        {"text": "sound", "pos": (WIN_WIDTH // 2, 440)},
+        {"text": "Sound Settings", "pos": (WIN_WIDTH // 2, 440)},
         {"text": "return", "pos": (WIN_WIDTH // 2, 500)}
     ]
 
@@ -143,9 +143,10 @@ def settings_screen():
                         reset_settings()
 
                     elif selected_item == 4:
-                        #사운드 기능추가
-                        print(1)
-
+                        sound_window = SoundSettingsWindow()
+                        # 사운드 설정 창 실행
+                        sound_window.run()
+                        
                     elif selected_item == 5:
                         running = False
             #마우스 커서이동
@@ -171,8 +172,9 @@ def settings_screen():
                             elif selected_item == 3:
                                 reset_settings()
                             elif selected_item == 4:
-                                #사운드 기능추가
-                                print(1)
+                                sound_window = SoundSettingsWindow()
+                                # 사운드 설정 창 실행
+                                sound_window.run()
                             elif selected_item == 5:
                                 running = False
         # Draw the menu
