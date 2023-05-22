@@ -41,7 +41,7 @@ button_height = 100
 button_padding = 20
 # Define menu items
 menu_items = [
-    {"text": "Game", "pos": (WIN_WIDTH//2, 200)},
+    {"text": "Game Mode", "pos": (WIN_WIDTH//2, 200)},
     {"text": "Achievement", "pos": (WIN_WIDTH//2, 300)},
     {"text": "Settings", "pos": (WIN_WIDTH//2, 400)},
     {"text": "Exit", "pos": (WIN_WIDTH//2, 500)}
