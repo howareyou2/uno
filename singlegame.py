@@ -662,6 +662,19 @@ def start_game():
                             user_group.draw(screen)
                             pygame.display.update()
 
+                    # 어게인
+                    elif splitCard[1] == "AGAIN":
+                        playDirection = playDirection * (-1)
+                        playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                        playDirection = playDirection * (-1)
+
+                        # 색 체인지
+                    elif splitCard[1] == "CHANGE":
+                        unoplayer = Computerplay.UnoPlayer(players[playerTurn])
+                        newColour = unoplayer.choose_color(players[playerTurn])
+                        curruntcolour = newColour
+
+
                     # 와일드 드로우 4
                     elif splitCard[1] == "DRAW4":
 
@@ -932,6 +945,19 @@ def start_game():
                                         players[playerDraw].extend(drawCards(4))
                                         # 컴퓨터 카드 변화구현
 
+                                    # 색 체인지
+                                    elif splitCard[1] == "CHANGE":
+                                        curruntcolour = show_color_popup(screen, 500, 100, font, colors, color_values)
+
+                                    # 어게인
+                                    elif splitCard[1] == "AGAIN":
+                                        playDirection = playDirection * (-1)
+                                        playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                                        playDirection = playDirection * (-1)
+
+
+
+
                                     # 턴 변화
                                     playerTurn = change_turn(playDirection, numPlayers, playerTurn)
 
@@ -1176,7 +1202,6 @@ def start_game():
                                     cardVal = splitCard[1]
                                 # 와읻드면 색 선택하게
                                 if curruntcolour == "BLACK":
-
                                     curruntcolour = show_color_popup(screen, 500, 100, font, colors, color_values)
 
                                 # 리버스면 다음턴 회전반대로
@@ -1198,6 +1223,16 @@ def start_game():
                                     playerDraw = next_draw(numPlayers, playDirection, playerTurn)
                                     players[playerDraw].extend(drawCards(4))
                                     # 컴퓨터 카드 변화구현
+
+                                # 색 체인지
+                                elif splitCard[1] == "CHANGE":
+                                    curruntcolour = show_color_popup(screen, 500, 100, font, colors, color_values)
+
+                                # 어게인
+                                elif splitCard[1] == "AGAIN":
+                                    playDirection = playDirection * (-1)
+                                    playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                                    playDirection = playDirection * (-1)
 
                                 # 턴 변화
                                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
@@ -1322,7 +1357,7 @@ def start_game():
             if splitCard[0] == "BLACK":
                 score += 50
             else:
-                if splitCard[1] == "REVERSE" or splitCard[1] == "SKIP" or splitCard[1] == "DRAW2":
+                if splitCard[1] == "REVERSE" or splitCard[1] == "SKIP" or splitCard[1] == "DRAW2" or splitCard[1] == "AGAIN" or splitCard[1] == "CHANGE":
                     score += 20
                 else:
                     score += int(splitCard[1])
