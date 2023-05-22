@@ -2,6 +2,7 @@ import pygame
 import colorblind
 import keySetting
 import json
+from soundsetting import SoundSettingsWindow
 
 # Define colors
 BLACK = (0, 0, 0)
