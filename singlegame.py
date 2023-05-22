@@ -111,7 +111,7 @@ def start_game():
     # 플레이어 인원 입력받기
 
     # 일단 7명으로 임의로 지정
-    numPlayers = 4
+    numPlayers = 2
 
     # 플레이어 점수
     playerscore = []
@@ -605,7 +605,16 @@ def start_game():
                 if len(players[playerTurn]) == 0:
                     running = False
                     print("finish")
-                    winner = playerTurn + 1
+                    text = font.render("{}'s win! continue : enter".format(playerTurn), True, BLACK)
+                    text_rect = text.get_rect(center=(int(screen_width * 0.3), int(screen_height * 0.5)))
+                    screen.blit(text, text_rect)
+                    pygame.display.update()
+                    # enter key 누르면 게임 종료
+                    while True:
+                        for event in pygame.event.get():
+                            if event.type == pygame.KEYDOWN:
+                                if event.key == pygame.K_RETURN:
+                                    return
 
                 else:
                     # 버린카드 특별카드 체크
@@ -879,6 +888,17 @@ def start_game():
                                         print("finish")
                                         running = False
                                         winner = playerTurn + 1
+                                        text = font.render("YOU win! continue : enter", True, BLACK)
+                                        text_rect = text.get_rect(
+                                            center=(int(screen_width * 0.3), int(screen_height * 0.5)))
+                                        screen.blit(text, text_rect)
+                                        pygame.display.update()
+                                        # enter key 누르면 게임 종료
+                                        while True:
+                                            for event in pygame.event.get():
+                                                if event.type == pygame.KEYDOWN:
+                                                    if event.key == pygame.K_RETURN:
+                                                        return
                                     # 버린카드 특별카드 체크
                                     splitCard = discards[-1].split("_", 1)
                                     curruntcolour = splitCard[0]
@@ -1134,6 +1154,18 @@ def start_game():
                                     print("finish")
                                     running = False
                                     winner = playerTurn + 1
+                                    text = font.render("YOU win! continue : enter", True, BLACK)
+                                    text_rect = text.get_rect(
+                                        center=(int(screen_width * 0.3), int(screen_height * 0.5)))
+                                    screen.blit(text, text_rect)
+                                    pygame.display.update()
+                                    # enter key 누르면 게임 종료
+                                    while True:
+                                        for event in pygame.event.get():
+                                            if event.type == pygame.KEYDOWN:
+                                                if event.key == pygame.K_RETURN:
+                                                    return
+
                                 # 버린카드 특별카드 체크
                                 splitCard = discards[-1].split("_", 1)
                                 curruntcolour = splitCard[0]
