@@ -7,6 +7,7 @@ from loadcard import Card
 import Computerplay
 from config import Configset
 import pause
+import achievement
 import datetime
 
 pygame.init()
@@ -137,6 +138,8 @@ def start_game():
 
     # 다음 턴
     playerTurn = 0
+    turn = 0
+
     # 시계방향1 반시계방향 -1
     playDirection = 1
 
@@ -503,6 +506,7 @@ def start_game():
                 # 1장 추가되는거 이미지로 구현
                 # 턴 변화
                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                turn += 1
 
                 # 화면다시 그리기
                 screen.blit(section3, (0, section1_height))
@@ -720,6 +724,7 @@ def start_game():
 
                     # 턴 변화
                     playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                    turn += 1
 
 
 
@@ -901,6 +906,9 @@ def start_game():
                                         print("finish")
                                         running = False
                                         winner = playerTurn + 1
+                                        setSingleWin()
+                                        if turn <= 10:
+                                            setIn10Turn()
                                         text = font.render("YOU win! continue : enter", True, BLACK)
                                         text_rect = text.get_rect(
                                             center=(int(screen_width * 0.3), int(screen_height * 0.5)))
@@ -960,6 +968,7 @@ def start_game():
 
                                     # 턴 변화
                                     playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                                    turn += 1
 
 
 
@@ -1132,6 +1141,7 @@ def start_game():
                             user_group.add(temp)
                             # 턴 변화
                             playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                            turn += 1
 
 
                             # 화면다시 그리기
@@ -1180,6 +1190,10 @@ def start_game():
                                     print("finish")
                                     running = False
                                     winner = playerTurn + 1
+                                    setSingleWin()
+                                    if turn <= 10:
+                                        setIn10Turn()
+
                                     text = font.render("YOU win! continue : enter", True, BLACK)
                                     text_rect = text.get_rect(
                                         center=(int(screen_width * 0.3), int(screen_height * 0.5)))
@@ -1236,6 +1250,7 @@ def start_game():
 
                                 # 턴 변화
                                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                                turn += 1
 
 
 
