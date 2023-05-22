@@ -36,8 +36,9 @@ button_padding = 20
 menu_items = [
     {"text": "Single Player", "pos": (WIN_WIDTH//2, 200)},
     {"text": "Achievement", "pos": (WIN_WIDTH//2, 300)},
-    {"text": "Settings", "pos": (WIN_WIDTH//2, 400)},
-    {"text": "Exit", "pos": (WIN_WIDTH//2, 500)}
+    {"text": "Multi Player", "pos": (WIN_WIDTH//2, 400)},
+    {"text": "Settings", "pos": (WIN_WIDTH//2, 500)},
+    {"text": "Exit", "pos": (WIN_WIDTH//2, 600)}
 ]
 # Set up the cursor
 cursor_img = pygame.Surface((20, 20))
@@ -65,9 +66,12 @@ while running:
                     modeChoosepage.modeChoose()
                 elif selected_item == 1:
                     print(1)
-                elif selected_item == 2:
-                    settings.settings_screen()
+                elif selected_item == 2
+                    #멀티플레이화면 연결 필요!!!!!1
+                    pass
                 elif selected_item == 3:
+                    settings.settings_screen()
+                elif selected_item == 4:
                     running = False
         elif event.type == pygame.MOUSEMOTION:
             cursor_rect.center = event.pos
@@ -76,7 +80,7 @@ while running:
             print("click!")
             if event.button == 1:
                 for i, item in enumerate(menu_items):
-                    button_rect = pygame.Rect(item["pos"][0] - button_width/2, item["pos"][1] - button_height/2, button_width, button_height)
+                    button_rect = pygame.Rect(item["pos"][0] - button_width/2, item["pos"][1] - button_height/2, button_width, 70)
                     if button_rect.collidepoint(event.pos):
                         selected_item = i
                         if selected_item == 0:
@@ -84,8 +88,11 @@ while running:
                         elif selected_item == 1:
                             print(1)
                         elif selected_item == 2:
-                            settings.settings_screen()
+                            #멀티플레이화면 연결 필요!!!!!1
+                            pass
                         elif selected_item == 3:
+                            settings.settings_screen()
+                        elif selected_item == 4:
                             running = False
     # Draw the menu
     win.fill(WHITE)
