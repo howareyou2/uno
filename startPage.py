@@ -4,7 +4,6 @@ import settings
 import singlegame
 import modeChoosepage
 import json
-import multiRoom2
 
 def load_custom_keys():
     global custom_keys
@@ -41,11 +40,10 @@ button_height = 100
 button_padding = 20
 # Define menu items
 menu_items = [
-    {"text": "Single Player", "pos": (WIN_WIDTH//2, 200)},
+    {"text": "Game", "pos": (WIN_WIDTH//2, 200)},
     {"text": "Achievement", "pos": (WIN_WIDTH//2, 300)},
-    {"text": "Multi Player", "pos": (WIN_WIDTH//2, 400)},
-    {"text": "Settings", "pos": (WIN_WIDTH//2, 500)},
-    {"text": "Exit", "pos": (WIN_WIDTH//2, 600)}
+    {"text": "Settings", "pos": (WIN_WIDTH//2, 400)},
+    {"text": "Exit", "pos": (WIN_WIDTH//2, 500)}
 ]
 # Set up the cursor
 cursor_img = pygame.Surface((20, 20))
@@ -74,12 +72,10 @@ while running:
                     modeChoosepage.modeChoose()
                 elif selected_item == 1:
                     print(1)
-                elif selected_item == 2
-                    multiRoom2.run()
-                    
-                elif selected_item == 3:
+                                  
+                elif selected_item == 2:
                     settings.settings_screen()
-                elif selected_item == 4:
+                elif selected_item == 3:
                     running = False
         elif event.type == pygame.MOUSEMOTION:
             cursor_rect.center = event.pos
@@ -95,12 +91,10 @@ while running:
                             modeChoosepage.modeChoose()
                         elif selected_item == 1:
                             print(1)
+                        
                         elif selected_item == 2:
-                            #멀티플레이화면 연결 필요!!!!!1
-                            pass
-                        elif selected_item == 3:
                             settings.settings_screen()
-                        elif selected_item == 4:
+                        elif selected_item == 3:
                             running = False
     # Draw the menu
     win.fill(WHITE)

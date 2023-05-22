@@ -4,6 +4,7 @@ import singlegame
 import storymode1
 import json
 import lobby
+import multiRoom2
 
 # Set up the window
 WIN_WIDTH = 800
@@ -58,8 +59,9 @@ def modeChoose():
     # Define menu items
     mode_items = [
     {"text": "Only Play", "pos": (WIN_WIDTH//2, 200)},
-    {"text": "Story Mode", "pos": (WIN_WIDTH//2, 320)},
-    {"text": "Back", "pos": (WIN_WIDTH//2, 440)}
+    {"text": "Story Mode", "pos": (WIN_WIDTH//2, 310)},
+    {"text": "Multi Play", "pos": (WIN_WIDTH//2, 420)},
+    {"text": "Back", "pos": (WIN_WIDTH//2, 530)}
 ]
 
     # Set up the cursor
@@ -94,6 +96,8 @@ def modeChoose():
                     elif selected_item == 1:
                         storymode1.story_map1()
                     elif selected_item == 2:
+                        multiRoom2.run()
+                    elif selected_item == 3:
                         running = False
 
             elif event.type == pygame.MOUSEMOTION:
@@ -111,6 +115,8 @@ def modeChoose():
                             elif selected_item == 1:
                                 storymode1.story_map1()
                             elif selected_item == 2:
+                                multiRoom2.run()
+                            elif selected_item == 3:
                                 running = False
 
 
