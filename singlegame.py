@@ -7,10 +7,39 @@ from loadcard import Card
 import Computerplay
 from config import Configset
 import pause
+import achievement
 import datetime
 
 pygame.init()
 
+def show_color_popup(screen, width, height, font, colors, color_values):
+    rects = []
+
+    popup_x = (screen.get_width() - width) // 2
+    popup_y = (screen.get_height() - height) // 2
+
+    for i in range(4):
+        rect_x = popup_x + 20 + i * 120
+        rect_y = popup_y + 25
+        rect = pygame.Rect(rect_x, rect_y, 50, 50)
+        rects.append(rect)
+        pygame.draw.rect(screen, color_values[i], rect)
+        color_text = font.render(colors[i], True, (0, 0, 0))
+        color_text_rect = color_text.get_rect(center=rect.center)
+        screen.blit(color_text, color_text_rect)
+
+    pygame.display.update()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                for i, rect in enumerate(rects):
+                    if rect.collidepoint(mouse_pos):
+                        return colors[i]
 
 def change_turn(playDirection, numPlayers, playerTurn):
     # 턴 이동
@@ -83,7 +112,7 @@ def start_game():
     # 플레이어 인원 입력받기
 
     # 일단 7명으로 임의로 지정
-    numPlayers = 4
+    numPlayers = 2
 
     # 플레이어 점수
     playerscore = []
@@ -109,6 +138,8 @@ def start_game():
 
     # 다음 턴
     playerTurn = 0
+    turn = 0
+
     # 시계방향1 반시계방향 -1
     playDirection = 1
 
@@ -317,6 +348,7 @@ def start_game():
     colors = ["RED", "YELLOW", "BLUE", "GREEN"]
     color_values = [(255, 0, 0), (255, 255, 0), (0, 0, 255), (0, 255, 0)]
     rects = []
+    '''
 
     for i in range(4):
         rect_x = text_rect.right + 50 + i * 90
@@ -329,6 +361,7 @@ def start_game():
         section3.blit(color_text, color_text_rect)
 
     pygame.display.update()
+    '''
 
     ##섹션3 우측 중앙에 마지막 한장 남았을때 누르는 버튼 구현
     # UNO_bt = pygame.image.load('./이채은/image/UNO_bt.png')
@@ -473,6 +506,7 @@ def start_game():
                 # 1장 추가되는거 이미지로 구현
                 # 턴 변화
                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                turn += 1
 
                 # 화면다시 그리기
                 screen.blit(section3, (0, section1_height))
@@ -486,18 +520,7 @@ def start_game():
 
                 user_group.draw(screen)
                 pygame.display.update()
-                '''
-                # playerTurn 화면표시
 
-                font = pygame.font.SysFont('comicsansms', 20)
-                if playerTurn == 0:
-                    text = font.render("Your turn", True, BLACK)
-                else:
-                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
-                text_rect = text.get_rect(
-                    center=(int(section3_width * 0.1), int(section3_height * 0.1)))
-                section3.blit(text, text_rect)
-                '''
                 # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
                 font = pygame.font.SysFont('comicsansms', 20)
                 if playerTurn == 0:
@@ -586,7 +609,16 @@ def start_game():
                 if len(players[playerTurn]) == 0:
                     running = False
                     print("finish")
-                    winner = playerTurn + 1
+                    text = font.render("{}'s win! continue : enter".format(playerTurn), True, BLACK)
+                    text_rect = text.get_rect(center=(int(screen_width * 0.3), int(screen_height * 0.5)))
+                    screen.blit(text, text_rect)
+                    pygame.display.update()
+                    # enter key 누르면 게임 종료
+                    while True:
+                        for event in pygame.event.get():
+                            if event.type == pygame.KEYDOWN:
+                                if event.key == pygame.K_RETURN:
+                                    return
 
                 else:
                     # 버린카드 특별카드 체크
@@ -634,6 +666,19 @@ def start_game():
                             user_group.draw(screen)
                             pygame.display.update()
 
+                    # 어게인
+                    elif splitCard[1] == "AGAIN":
+                        playDirection = playDirection * (-1)
+                        playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                        playDirection = playDirection * (-1)
+
+                        # 색 체인지
+                    elif splitCard[1] == "CHANGE":
+                        unoplayer = Computerplay.UnoPlayer(players[playerTurn])
+                        newColour = unoplayer.choose_color(players[playerTurn])
+                        curruntcolour = newColour
+
+
                     # 와일드 드로우 4
                     elif splitCard[1] == "DRAW4":
 
@@ -679,6 +724,7 @@ def start_game():
 
                     # 턴 변화
                     playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                    turn += 1
 
 
 
@@ -860,6 +906,20 @@ def start_game():
                                         print("finish")
                                         running = False
                                         winner = playerTurn + 1
+                                        setSingleWin()
+                                        if turn <= 10:
+                                            setIn10Turn()
+                                        text = font.render("YOU win! continue : enter", True, BLACK)
+                                        text_rect = text.get_rect(
+                                            center=(int(screen_width * 0.3), int(screen_height * 0.5)))
+                                        screen.blit(text, text_rect)
+                                        pygame.display.update()
+                                        # enter key 누르면 게임 종료
+                                        while True:
+                                            for event in pygame.event.get():
+                                                if event.type == pygame.KEYDOWN:
+                                                    if event.key == pygame.K_RETURN:
+                                                        return
                                     # 버린카드 특별카드 체크
                                     splitCard = discards[-1].split("_", 1)
                                     curruntcolour = splitCard[0]
@@ -871,9 +931,7 @@ def start_game():
                                         cardVal = splitCard[1]
                                     # 와읻드면 색 선택하게
                                     if curruntcolour == "BLACK":
-                                        unoplayer = Computerplay.UnoPlayer(players[playerTurn])
-                                        newColour = unoplayer.choose_color(players[playerTurn])
-                                        curruntcolour = newColour
+                                        curruntcolour = show_color_popup(screen, 500, 100, font, colors, color_values)
 
                                     # 리버스면 다음턴 회전반대로
                                     if cardVal == "REVERSE":
@@ -895,8 +953,22 @@ def start_game():
                                         players[playerDraw].extend(drawCards(4))
                                         # 컴퓨터 카드 변화구현
 
+                                    # 색 체인지
+                                    elif splitCard[1] == "CHANGE":
+                                        curruntcolour = show_color_popup(screen, 500, 100, font, colors, color_values)
+
+                                    # 어게인
+                                    elif splitCard[1] == "AGAIN":
+                                        playDirection = playDirection * (-1)
+                                        playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                                        playDirection = playDirection * (-1)
+
+
+
+
                                     # 턴 변화
                                     playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                                    turn += 1
 
 
 
@@ -965,18 +1037,7 @@ def start_game():
                                     pygame.display.update()
 
                                     break
-                                    '''
 
-                                    # playerTurn 화면표시
-                                    font = pygame.font.SysFont('comicsansms', 20)
-                                    if playerTurn == 0:
-                                        text = font.render("Your turn", True, BLACK)
-                                    else:
-                                        text = font.render("{}'s turn".format(playerTurn), True, BLACK)
-                                    text_rect = text.get_rect(
-                                        center=(int(section3_width * 0.1), int(section3_height * 0.1)))
-                                    section3.blit(text, text_rect)
-                                    '''
                                     # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
                                     font = pygame.font.SysFont('comicsansms', 20)
                                     if playerTurn == 0:
@@ -1080,6 +1141,7 @@ def start_game():
                             user_group.add(temp)
                             # 턴 변화
                             playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                            turn += 1
 
 
                             # 화면다시 그리기
@@ -1093,19 +1155,7 @@ def start_game():
                             user_group.draw(screen)
                             pygame.display.update()
 
-                            '''
-                            # playerTurn 화면표시
 
-                            font = pygame.font.SysFont('comicsansms', 20)
-                            if playerTurn == 0:
-                                text = font.render("Your turn", True, BLACK)
-                            else:
-                                text = font.render("{}'s turn".format(playerTurn), True, BLACK)
-                            text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
-                            section3.blit(text, text_rect)
-
-                            pygame.display.update()
-                            '''
                             # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
                             font = pygame.font.SysFont('comicsansms', 20)
                             if playerTurn == 0:
@@ -1140,6 +1190,22 @@ def start_game():
                                     print("finish")
                                     running = False
                                     winner = playerTurn + 1
+                                    setSingleWin()
+                                    if turn <= 10:
+                                        setIn10Turn()
+
+                                    text = font.render("YOU win! continue : enter", True, BLACK)
+                                    text_rect = text.get_rect(
+                                        center=(int(screen_width * 0.3), int(screen_height * 0.5)))
+                                    screen.blit(text, text_rect)
+                                    pygame.display.update()
+                                    # enter key 누르면 게임 종료
+                                    while True:
+                                        for event in pygame.event.get():
+                                            if event.type == pygame.KEYDOWN:
+                                                if event.key == pygame.K_RETURN:
+                                                    return
+
                                 # 버린카드 특별카드 체크
                                 splitCard = discards[-1].split("_", 1)
                                 curruntcolour = splitCard[0]
@@ -1150,9 +1216,7 @@ def start_game():
                                     cardVal = splitCard[1]
                                 # 와읻드면 색 선택하게
                                 if curruntcolour == "BLACK":
-                                    unoplayer = Computerplay.UnoPlayer(players[playerTurn])
-                                    newColour = unoplayer.choose_color(players[playerTurn])
-                                    curruntcolour = newColour
+                                    curruntcolour = show_color_popup(screen, 500, 100, font, colors, color_values)
 
                                 # 리버스면 다음턴 회전반대로
                                 if cardVal == "REVERSE":
@@ -1174,8 +1238,19 @@ def start_game():
                                     players[playerDraw].extend(drawCards(4))
                                     # 컴퓨터 카드 변화구현
 
+                                # 색 체인지
+                                elif splitCard[1] == "CHANGE":
+                                    curruntcolour = show_color_popup(screen, 500, 100, font, colors, color_values)
+
+                                # 어게인
+                                elif splitCard[1] == "AGAIN":
+                                    playDirection = playDirection * (-1)
+                                    playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                                    playDirection = playDirection * (-1)
+
                                 # 턴 변화
                                 playerTurn = change_turn(playDirection, numPlayers, playerTurn)
+                                turn += 1
 
 
 
@@ -1241,19 +1316,7 @@ def start_game():
 
                                 user_group.draw(screen)
                                 pygame.display.update()
-                                '''
 
-                                # playerTurn 화면표시
-
-                                font = pygame.font.SysFont('comicsansms', 20)
-                                if playerTurn == 0:
-                                    text = font.render("Your turn", True, BLACK)
-                                else:
-                                    text = font.render("{}'s turn".format(playerTurn), True, BLACK)
-                                text_rect = text.get_rect(
-                                    center=(int(section3_width * 0.1), int(section3_height * 0.1)))
-                                section3.blit(text, text_rect)
-                                '''
                                 # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
                                 font = pygame.font.SysFont('comicsansms', 20)
                                 if playerTurn == 0:
@@ -1309,7 +1372,7 @@ def start_game():
             if splitCard[0] == "BLACK":
                 score += 50
             else:
-                if splitCard[1] == "REVERSE" or splitCard[1] == "SKIP" or splitCard[1] == "DRAW2":
+                if splitCard[1] == "REVERSE" or splitCard[1] == "SKIP" or splitCard[1] == "DRAW2" or splitCard[1] == "AGAIN" or splitCard[1] == "CHANGE":
                     score += 20
                 else:
                     score += int(splitCard[1])

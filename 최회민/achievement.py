@@ -12,6 +12,10 @@ class Achievement():
         self.storyDWin=self.cf['storyDWin']
         self.in10Turn=self.cf['in10Turn']
         self.notUseSkill=self.cf['notUseSkill']
+        self.oneColor=self.cf['oneColor']
+        self.twoColors=self.cf['twoColors']
+        self.in10seconds=self.cf['10seconds']
+        
     def setSingleWin(self):
         self.singleWin=True
         self.cf.set('singleWin','achieve', "True")
@@ -68,7 +72,28 @@ class Achievement():
         with open('achievement.ini','w') as change:
             self.cf.write(change)        
         self.notUseSkill=self.cf['notUseSkill']
-
+    def setOneColor(self):
+        self.cf.set('oneColor','achieve', "True")
+        today=self.getToday()
+        self.cf.set('oneColor','time', today)
+        with open('achievement.ini','w') as change:
+            self.cf.write(change)        
+        self.oneColor=self.cf['oneColor']
+    def setTwoColors(self):
+        self.cf.set('twoColors','achieve', "True")
+        today=self.getToday()
+        self.cf.set('twoColors','time', today)
+        with open('achievement.ini','w') as change:
+            self.cf.write(change)        
+        self.twoColors=self.cf['twoColors']
+    def setin10seconds(self):
+        self.cf.set('10seconds','achieve', "True")
+        today=self.getToday()
+        self.cf.set('10seconds','time', today)
+        with open('achievement.ini','w') as change:
+            self.cf.write(change)        
+        self.in10seconds=self.cf['10seconds']
+        
     def getSingleWin(self):
         return self.singleWin
     
@@ -89,6 +114,15 @@ class Achievement():
     
     def getNotUseSkil(self):
         return self.notUseSkill
+    
+    def getOneColor(self):
+        return self.oneColor
+    
+    def getTwoColors(self):
+        return self.twoColors
+        
+    def getin10seconds(self):
+        return self.in10seconds
     
     def getToday(self):
         now = datetime.now()
