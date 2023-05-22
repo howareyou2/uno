@@ -3,7 +3,14 @@ pygame.init()
 import settings
 import singlegame
 import modeChoosepage
+import json
+import multiRoom2
 
+def load_custom_keys():
+    global custom_keys
+    with open('keySetting.json', 'r') as f:
+        custom_keys = json.load(f)
+        
 #'배경.mp3' 파일을 불러와서 재생합니다.
 pygame.mixer.music.load('./이채은/sound/배경.mp3')
 pygame.mixer.music.play(-1)
@@ -51,24 +58,25 @@ selected_item = 0
 running = True
 while running:
     # Handle events
+    load_custom_keys()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
-            elif event.key == pygame.K_UP:
+            elif event.key == custom_keys['up']:
                 selected_item = (selected_item - 1) % len(menu_items)
-            elif event.key == pygame.K_DOWN:
+            elif event.key == custom_keys['down']:
                 selected_item = (selected_item + 1) % len(menu_items)
-            elif event.key == pygame.K_RETURN:
+            elif event.key == custom_keys['return']:
                 if selected_item == 0:
                     modeChoosepage.modeChoose()
                 elif selected_item == 1:
                     print(1)
                 elif selected_item == 2
-                    #멀티플레이화면 연결 필요!!!!!1
-                    pass
+                    multiRoom2.run()
+                    
                 elif selected_item == 3:
                     settings.settings_screen()
                 elif selected_item == 4:
