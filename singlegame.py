@@ -353,8 +353,8 @@ def start_game():
     section3.blit(text, text_rect)
     '''
     with open('nickname.json', 'r') as f:
-    data = json.load(f)
-    nickname = data['nickname']
+        data = json.load(f)
+        nickname = data['nickname']
 
 
     # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
