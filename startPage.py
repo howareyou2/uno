@@ -4,6 +4,7 @@ import settings
 import singlegame
 import modeChoosepage
 import json
+import achievpage
 
 def load_custom_keys():
     global custom_keys
@@ -40,7 +41,7 @@ button_height = 100
 button_padding = 20
 # Define menu items
 menu_items = [
-    {"text": "Game", "pos": (WIN_WIDTH//2, 200)},
+    {"text": "Game Mode", "pos": (WIN_WIDTH//2, 200)},
     {"text": "Achievement", "pos": (WIN_WIDTH//2, 300)},
     {"text": "Settings", "pos": (WIN_WIDTH//2, 400)},
     {"text": "Exit", "pos": (WIN_WIDTH//2, 500)}
@@ -71,8 +72,7 @@ while running:
                 if selected_item == 0:
                     modeChoosepage.modeChoose()
                 elif selected_item == 1:
-                    print(1)
-                                  
+                    achievpage.achiev()  
                 elif selected_item == 2:
                     settings.settings_screen()
                 elif selected_item == 3:
@@ -90,8 +90,7 @@ while running:
                         if selected_item == 0:
                             modeChoosepage.modeChoose()
                         elif selected_item == 1:
-                            print(1)
-                        
+                            achievpage.achiev()  
                         elif selected_item == 2:
                             settings.settings_screen()
                         elif selected_item == 3:

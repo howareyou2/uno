@@ -1,6 +1,6 @@
 import pygame
 import sys
-
+import storymode2
 import loadcard
 import shuffle
 from loadcard import Card
@@ -910,7 +910,7 @@ def start_game():
                                             for event in pygame.event.get():
                                                 if event.type == pygame.KEYDOWN:
                                                     if event.key == pygame.K_RETURN:
-                                                        return
+                                                        storymode2.story_map2()
                                     # 버린카드 특별카드 체크
                                     splitCard = discards[-1].split("_", 1)
                                     curruntcolour = splitCard[0]
@@ -1195,7 +1195,8 @@ def start_game():
                                         for event in pygame.event.get():
                                             if event.type == pygame.KEYDOWN:
                                                 if event.key == pygame.K_RETURN:
-                                                    return
+                                                    storymode2.story_map2()
+
 
                                 # 버린카드 특별카드 체크
                                 splitCard = discards[-1].split("_", 1)
