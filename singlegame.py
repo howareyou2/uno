@@ -408,55 +408,17 @@ def start_game():
     # UNO_bt = pygame.transform.scale(UNO_bt, (150,110))
     # section3.blit(UNO_bt, (int(section3_width*0.72), int(section3_height*0.2), 10, 10))
 
-    # 일시정지 및 종료 버튼 구현하고 "Pause" 텍스트 생성
-    pause_button_width = 30
-    pause_button_height = 30
-    pause_button_x = section1_width - pause_button_width - 10
-    pause_button_y = 10
-
     ##섹션3 우측 중앙에 마지막 한장 남았을때 누르는 버튼 구현
     # UNO_bt = pygame.image.load('./이채은/image/UNO_bt.png')
     # UNO_bt = pygame.transform.scale(UNO_bt, (150,110))
     # section3.blit(UNO_bt, (int(section3_width*0.72), int(section3_height*0.2), 10, 10))
 
-    # "pause_button"배경 흰색으로 설정
-    WHITE = (255, 255, 255)
-    pause_button_rect = pygame.draw.rect(section1, LIGHT_YELLOW,
-                                         (pause_button_x, pause_button_y, pause_button_width, pause_button_height))
-
-    font = pygame.font.SysFont('comicsansms', 15)
-    bold_font = pygame.font.SysFont('comicsansms', 15, bold=True)
-    text = bold_font.render("||", True, BLACK)
-    text_rect = text.get_rect(
-        center=(pause_button_x + pause_button_width / 2, pause_button_y + pause_button_height / 2))
-    section1.blit(text, text_rect)
-
-
-    # 일시정지 및 종료 버튼 구현하고 "Pause" 텍스트 생성
-    pause_button = pygame.Rect(10, 10, 30, 30)
-    pygame.draw.rect(section1, LIGHT_YELLOW, pause_button)
 
     screen.blit(section1, (0, 0))
     screen.blit(section2, (section1_width, 0))
     screen.blit(section3, (0, section1_height))
 
-    def draw_game_screen():
-        screen.fill((255, 255, 255))
-        pygame.draw.rect(screen, LIGHT_PINK, pause_button)
-
-        screen.blit(section1, (0, 0))
-        screen.blit(section2, (section1_width, 0))
-        screen.blit(section3, (0, section1_height))
-        pygame.display.update()
-
-    def draw_pause_screen():
-        pause.run_pause_screen(screen)
-
-    def resume_game():
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_ESCAPE]:
-            return True
-        return False
+    pygame.display.update()
 
     # 게임 시작할 때
     # 유저 카드 그리기
