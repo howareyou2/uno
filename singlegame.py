@@ -352,11 +352,15 @@ def start_game():
     text_rect = text.get_rect(center=(int(section3_width * 0.1), int(section3_height * 0.1)))
     section3.blit(text, text_rect)
     '''
+    with open('nickname.json', 'r') as f:
+    data = json.load(f)
+    nickname = data['nickname']
+
 
     # 섹션3 좌측 상단에 "Your turn" 텍스트 생성
     font = pygame.font.SysFont('comicsansms', 20)
     if playerTurn == 0:
-        text = font.render("Your turn", True, BLACK)
+        text = font.render("{}' turn".format(nickname), True, BLACK)
     else:
         text = font.render("{}'s turn".format(playerTurn), True, BLACK)
 
