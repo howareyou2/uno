@@ -70,7 +70,7 @@ def lobby():
                             with open('players.json', 'w') as file:
                                 json.dump(players_dict, file)
 
-                        def draw_window():
+                        def draw_window(num_players):
                             win.fill(WHITE)
 
                             pygame.draw.rect(win, pygame.Color('red'), pygame.Rect(button_x - button_width, button_y, button_width, button_height))
@@ -93,6 +93,13 @@ def lobby():
                             win.blit(title_text, ((WIN_WIDTH - title_text.get_width()) / 2, 50))
                             win.blit(keyboard, (50, 25))
                             win.blit(mouse, (600, 20))
+                            for i, item in enumerate(mode_items):
+                                if i != selected_item:
+                                    menu_text = mode_menu_font.render(item["text"], True, GRAY)
+                                else:
+                                    menu_text = mode_menu_font.render(item["text"], True, BLACK)
+                                rect = menu_text.get_rect(center=item["pos"])
+                                win.blit(menu_text, rect)
 
                         running_players = True
                         while running_players:
@@ -111,7 +118,7 @@ def lobby():
                                         players += 1
                                         players = min(5, players)
 
-                            draw_window()
+                            draw_window(players)
                             pygame.display.update()
                         
                     elif selected_item == 1:
