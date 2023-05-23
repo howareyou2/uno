@@ -72,7 +72,7 @@ while running:
                 if selected_item == 0:
                     modeChoosepage.modeChoose()
                 elif selected_item == 1:
-                    achievpage.achieve_screen()  
+                    achievpage.achiev()  
                 elif selected_item == 2:
                     settings.settings_screen()
                 elif selected_item == 3:
@@ -90,7 +90,7 @@ while running:
                         if selected_item == 0:
                             modeChoosepage.modeChoose()
                         elif selected_item == 1:
-                            achievpage.achieve_screen()  
+                            achievpage.achiev()  
                         elif selected_item == 2:
                             settings.settings_screen()
                         elif selected_item == 3:
