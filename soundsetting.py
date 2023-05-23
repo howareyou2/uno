@@ -31,9 +31,9 @@ class SoundSettingsWindow:
         self.sound_effect.set_volume(self.volume_2 / 100)
 
         self.font = pygame.font.Font(None, 30)
-        text1 = self.font.render("Text1", True, pygame.Color('black'))
-        text2 = self.font.render("Text2", True, pygame.Color('black'))
-        text3 = self.font.render("Text3", True, pygame.Color('black'))
+        text1 = self.font.render("All", True, pygame.Color('black'))
+        text2 = self.font.render("Back", True, pygame.Color('black'))
+        text3 = self.font.render("Card", True, pygame.Color('black'))
         self.texts = [text1, text2, text3]
 
     def load_sound_settings(self):
